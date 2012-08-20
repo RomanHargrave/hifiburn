@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project HifiBurn with Jar-in-Jar Loader">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <target name="create_run_jar">
+        <jar destfile="hifiburn.jar">
+            <manifest>
+                <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
+                <attribute name="Rsrc-Main-Class" value="de.hifiburn.ui.swt.MainWindow"/>
+                <attribute name="Class-Path" value="."/>
+                <attribute name="Rsrc-Class-Path" value="./ org.eclipse.osgi_3.7.1.R37x_v20110808-1106.jar org.eclipse.core.commands_3.6.0.I20110111-0800.jar org.eclipse.equinox.common_3.6.0.v20110523.jar org.eclipse.equinox.registry_3.5.101.R37x_v20110810-1611.jar org.eclipse.core.runtime_3.7.0.v20110110.jar org.eclipse.text_3.5.101.r371_v20110810-0800.jar org.eclipse.swt.gtk.linux.x86_64_3.7.1.v3738a.jar org.eclipse.jface_3.7.0.I20110522-1430.jar org.eclipse.jface.text_3.7.1.r371_v20110825-0800.jar org.eclipse.ui.workbench_3.7.0.I20110519-0100.jar com.ibm.icu_4.4.2.v20110208.jar org.eclipse.ui.forms_3.5.100.v20110425.jar org.eclipse.core.databinding_1.4.0.I20110111-0800.jar org.eclipse.core.databinding.beans_1.2.100.I20100824-0800.jar org.eclipse.core.databinding.observable_1.4.0.I20110222-0800.jar org.eclipse.core.databinding.property_1.4.0.I20110222-0800.jar org.eclipse.jface.databinding_1.5.0.I20100907-0800.jar swt-grouplayout.jar jaudiotagger-2.0.4-20111207.115108-15.jar jlibav-0.1.jar jna.jar platform.jar swing2swt.jar"/>
+            </manifest>
+        	<zipfileset src="lib/jar-in-jar-loader.zip"/>
+            <fileset dir="bin"/>
+            <!--<zipfileset dir="/opt/eclipse/plugins" includes="org.eclipse.osgi_3.7.1.R37x_v20110808-1106.jar"/>-->
+            <zipfileset dir="/opt/eclipse/plugins" includes="org.eclipse.core.commands_3.6.0.I20110111-0800.jar"/>
+            <zipfileset dir="/opt/eclipse/plugins" includes="org.eclipse.equinox.common_3.6.0.v20110523.jar"/>
+            <zipfileset dir="/opt/eclipse/plugins" includes="org.eclipse.equinox.registry_3.5.101.R37x_v20110810-1611.jar"/>
+            <zipfileset dir="/opt/eclipse/plugins" includes="org.eclipse.core.runtime_3.7.0.v20110110.jar"/>
+            <zipfileset dir="/opt/eclipse/plugins" includes="org.eclipse.text_3.5.101.r371_v20110810-0800.jar"/>
+            <zipfileset dir="/opt/eclipse/plugins" includes="org.eclipse.swt.gtk.linux.x86_64_3.7.1.v3738a.jar"/>
+            <zipfileset dir="/opt/eclipse/plugins" includes="org.eclipse.jface_3.7.0.I20110522-1430.jar"/>
+            <zipfileset dir="/opt/eclipse/plugins" includes="org.eclipse.jface.text_3.7.1.r371_v20110825-0800.jar"/>
+            <!--<zipfileset dir="/opt/eclipse/plugins" includes="org.eclipse.ui.workbench_3.7.0.I20110519-0100.jar"/>-->
+            <!--<zipfileset dir="/opt/eclipse/plugins" includes="com.ibm.icu_4.4.2.v20110208.jar"/>-->
+            <zipfileset dir="/opt/eclipse/plugins" includes="org.eclipse.ui.forms_3.5.100.v20110425.jar"/>
+            <zipfileset dir="/opt/eclipse/plugins" includes="org.eclipse.core.databinding_1.4.0.I20110111-0800.jar"/>
+            <zipfileset dir="/opt/eclipse/plugins" includes="org.eclipse.core.databinding.beans_1.2.100.I20100824-0800.jar"/>
+            <zipfileset dir="/opt/eclipse/plugins" includes="org.eclipse.core.databinding.observable_1.4.0.I20110222-0800.jar"/>
+            <zipfileset dir="/opt/eclipse/plugins" includes="org.eclipse.core.databinding.property_1.4.0.I20110222-0800.jar"/>
+            <zipfileset dir="/opt/eclipse/plugins" includes="org.eclipse.jface.databinding_1.5.0.I20100907-0800.jar"/>
+            <zipfileset dir="lib" includes="swt-grouplayout.jar"/>
+            <zipfileset dir="lib" includes="jaudiotagger-2.0.4-20111207.115108-15.jar"/>
+            <zipfileset dir="lib" includes="jlibav-0.1.jar"/>
+            <zipfileset dir="lib" includes="jna.jar"/>
+            <zipfileset dir="lib" includes="platform.jar"/>
+            <zipfileset dir="lib" includes="swing2swt.jar"/>
+        </jar>
+    </target>
+	<target name="clean">
+		<delete file="hifiburn.jar"/>
+	</target>
+</project>
