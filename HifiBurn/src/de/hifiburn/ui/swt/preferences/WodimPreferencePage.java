@@ -15,6 +15,7 @@ import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.widgets.Composite;
 
 import de.hifiburn.burner.IBurner;
+import de.hifiburn.i18n.Messages;
 import de.hifiburn.logic.BurnerManager;
 import de.hifiburn.logic.IPreferenceConstants;
 
@@ -48,7 +49,7 @@ public class WodimPreferencePage extends FieldEditorPreferencePage
     @Override
     protected boolean doCheckState()
     {
-      setErrorMessage(JFaceResources.getString("DirectoryFieldEditor.errorMessage"));//$NON-NLS-1$
+      setErrorMessage("Value must be an existing directory");//$NON-NLS-1$
       
       String _dir = getTextControl().getText().trim();
       if (_dir.length() == 0 && isEmptyStringAllowed()) 
@@ -60,13 +61,13 @@ public class WodimPreferencePage extends FieldEditorPreferencePage
       if (!_file.isDirectory())
         return false;
       
-      String _executable = "wodim";
-      if (System.getProperty("os.name").contains("win"))
-        _executable = "wodim.exe";
+      String _executable = "wodim"; //$NON-NLS-1$
+      if (System.getProperty("os.name").contains("win")) //$NON-NLS-1$ //$NON-NLS-2$
+        _executable = "wodim.exe"; //$NON-NLS-1$
       
       if (!new File(_file,_executable).exists())
       {
-        setErrorMessage("Im angegebenen Verzeichnis konnte Wodim nicht gefunden werden.");
+        setErrorMessage(Messages.WodimPreferencePage_0);
         return false;
       }
       
@@ -90,7 +91,7 @@ public class WodimPreferencePage extends FieldEditorPreferencePage
   @Override
   public String getTitle()
   {
-    return "Wodim";
+    return Messages.WodimPreferencePage_1;
   }
 
 //  //Text fields for user to enter preferences
@@ -149,20 +150,20 @@ public class WodimPreferencePage extends FieldEditorPreferencePage
   @Override
   protected void createFieldEditors()
   {
-    DirectoryFieldEditor _dir = new WodimDirectoryFieldEditor(IPreferenceConstants.WODIM_PATH,"Pfad zu Wodim:",
+    DirectoryFieldEditor _dir = new WodimDirectoryFieldEditor(IPreferenceConstants.WODIM_PATH,Messages.WodimPreferencePage_2,
         getFieldEditorParent());
     _dir.setValidateStrategy(DirectoryFieldEditor.VALIDATE_ON_KEY_STROKE);
     addField(_dir);
     
     String[][] _devs = getDevices();
     
-    ComboFieldEditor _dev = new ComboFieldEditor(IPreferenceConstants.WODIM_DEVICE, "Brenner:", _devs, getFieldEditorParent());
+    ComboFieldEditor _dev = new ComboFieldEditor(IPreferenceConstants.WODIM_DEVICE, Messages.WodimPreferencePage_3, _devs, getFieldEditorParent());
     addField(_dev);
   }
 
   private String[][] getDevices()
   {
-    IBurner _wodim = BurnerManager.getInstance().getBurner("wodim");
+    IBurner _wodim = BurnerManager.getInstance().getBurner("wodim"); //$NON-NLS-1$
     if (_wodim==null)
       return null;
     

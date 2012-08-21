@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Label;
 
 public class InformationPreferencePage extends PreferencePage
 {
-  String text = "";
+  String text = ""; //$NON-NLS-1$
 
   /**
    * 

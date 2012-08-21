@@ -17,6 +17,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Shell;
 
+import de.hifiburn.i18n.Messages;
+
 import swing2swt.layout.BorderLayout;
 
 public class ProgressDialog extends Dialog
@@ -35,7 +37,7 @@ public class ProgressDialog extends Dialog
   public ProgressDialog(Shell parent, int style)
   {
     super(parent, style);
-    setText("SWT Dialog");
+    setText(Messages.ProgressDialog_0);
   }
 
   /**
@@ -73,19 +75,19 @@ public class ProgressDialog extends Dialog
     composite.setLayout(new GridLayout(2, false));
     
     Label lblAktuelleAktion = new Label(composite, SWT.NONE);
-    lblAktuelleAktion.setText("Aktuelle Aktion");
+    lblAktuelleAktion.setText(Messages.ProgressDialog_1);
     
     lblCurrentAction = new Label(composite, SWT.NONE);
     lblCurrentAction.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
     
     Label lblFortschritt = new Label(composite, SWT.NONE);
-    lblFortschritt.setText("Fortschritt");
+    lblFortschritt.setText(Messages.ProgressDialog_2);
     
     ProgressBar progressBar = new ProgressBar(composite, SWT.NONE);
     progressBar.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
     
     Group grpActions = new Group(shell, SWT.NONE);
-    grpActions.setText("Aktionen");
+    grpActions.setText(Messages.ProgressDialog_3);
     grpActions.setLayoutData(BorderLayout.CENTER);
     grpActions.setLayout(new FormLayout());
 

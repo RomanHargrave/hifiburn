@@ -15,6 +15,7 @@ import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.widgets.Composite;
 
 import de.hifiburn.burner.IBurner;
+import de.hifiburn.i18n.Messages;
 import de.hifiburn.logic.BurnerManager;
 import de.hifiburn.logic.IPreferenceConstants;
 
@@ -48,7 +49,7 @@ public class CdrdaoPreferencePage extends FieldEditorPreferencePage
     @Override
     protected boolean doCheckState()
     {
-      setErrorMessage(JFaceResources.getString("DirectoryFieldEditor.errorMessage"));//$NON-NLS-1$
+      setErrorMessage("Value must be an existing directory"); //$NON-NLS-1$
       
       String _dir = getTextControl().getText().trim();
       if (_dir.length() == 0 && isEmptyStringAllowed()) 
@@ -60,13 +61,13 @@ public class CdrdaoPreferencePage extends FieldEditorPreferencePage
       if (!_file.isDirectory())
         return false;
       
-      String _executable = "cdrdao";
-      if (System.getProperty("os.name").contains("win"))
-        _executable = "cdrdao.exe";
+      String _executable = "cdrdao"; //$NON-NLS-1$
+      if (System.getProperty("os.name").contains("win")) //$NON-NLS-1$  //$NON-NLS-2$
+        _executable = "cdrdao.exe";  //$NON-NLS-1$
       
       if (!new File(_file,_executable).exists())
       {
-        setErrorMessage("Im angegebenen Verzeichnis konnte Cdrdao nicht gefunden werden.");
+        setErrorMessage(Messages.CdrdaoPreferencePage_0);
         return false;
       }
       
@@ -90,26 +91,26 @@ public class CdrdaoPreferencePage extends FieldEditorPreferencePage
   @Override
   public String getTitle()
   {
-    return "Cdrdao";
+    return Messages.CdrdaoPreferencePage_1;
   }
 
   @Override
   protected void createFieldEditors()
   {
-    DirectoryFieldEditor _dir = new CdrdaoDirectoryFieldEditor(IPreferenceConstants.CDRDAO_PATH,"Pfad zu Cdrdao:",
+    DirectoryFieldEditor _dir = new CdrdaoDirectoryFieldEditor(IPreferenceConstants.CDRDAO_PATH,Messages.CdrdaoPreferencePage_2,
         getFieldEditorParent());
     _dir.setValidateStrategy(DirectoryFieldEditor.VALIDATE_ON_KEY_STROKE);
     addField(_dir);
     
     String[][] _devs = getDevices();
     
-    ComboFieldEditor _dev = new ComboFieldEditor(IPreferenceConstants.CDRDAO_DEVICE, "Brenner:", _devs, getFieldEditorParent());
+    ComboFieldEditor _dev = new ComboFieldEditor(IPreferenceConstants.CDRDAO_DEVICE, Messages.CdrdaoPreferencePage_3, _devs, getFieldEditorParent());
     addField(_dev);
   }
 
   private String[][] getDevices()
   {
-    IBurner _cdrdao = BurnerManager.getInstance().getBurner("cdrdao");
+    IBurner _cdrdao = BurnerManager.getInstance().getBurner("cdrdao"); //$NON-NLS-1$
     if (_cdrdao==null)
       return null;
     

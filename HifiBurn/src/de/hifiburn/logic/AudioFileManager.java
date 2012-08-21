@@ -20,6 +20,7 @@ import org.jaudiotagger.tag.KeyNotFoundException;
 import org.jaudiotagger.tag.Tag;
 
 import de.hifiburn.converter.IConverter;
+import de.hifiburn.i18n.Messages;
 import de.hifiburn.model.Track;
 
 public class AudioFileManager
@@ -76,7 +77,7 @@ public class AudioFileManager
   public void readMetaData(Track theTrack, File theFile) throws IOException
   {
     if (!theFile.exists() || !theFile.canRead())
-      throw new IOException(String.format("Could not read metadata from file %s.",theFile.getAbsoluteFile()));
+      throw new IOException(String.format(Messages.AudioFileManager_0,theFile.getAbsoluteFile()));
     
     AudioFile _af = null;
     try
@@ -85,17 +86,17 @@ public class AudioFileManager
     }
     catch (Exception _e)
     {
-      new IOException(String.format("Could not read metadata from file %s (%s).",theFile.getAbsoluteFile(), _e.getMessage()));
+      new IOException(String.format(Messages.AudioFileManager_1,theFile.getAbsoluteFile(), _e.getMessage()));
     }
     
     if (_af==null)
     {
       theTrack.setDuration(0);
-      theTrack.setInterpret("");
-      theTrack.setTitle("");
-      theTrack.setAlbumtitle("");
-      theTrack.setAlbuminterpret("");
-      theTrack.setSongwriter("");
+      theTrack.setInterpret(""); //$NON-NLS-1$
+      theTrack.setTitle(""); //$NON-NLS-1$
+      theTrack.setAlbumtitle(""); //$NON-NLS-1$
+      theTrack.setAlbuminterpret(""); //$NON-NLS-1$
+      theTrack.setSongwriter(""); //$NON-NLS-1$
       return;
     }
     
@@ -118,11 +119,11 @@ public class AudioFileManager
     }
     catch (KeyNotFoundException _e)
     {
-      return "";
+      return ""; //$NON-NLS-1$
     }
     catch (UnsupportedOperationException _e)
     {
-      return "";
+      return ""; //$NON-NLS-1$
     }
   }
 }

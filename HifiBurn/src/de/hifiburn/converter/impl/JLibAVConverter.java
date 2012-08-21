@@ -27,6 +27,7 @@ import org.libav.video.FrameScaler;
 
 import de.hifiburn.converter.ConvertException;
 import de.hifiburn.converter.IConverter;
+import de.hifiburn.i18n.Messages;
 
 public class JLibAVConverter implements IConverter
 {
@@ -43,7 +44,7 @@ public class JLibAVConverter implements IConverter
     if (theOutputFormat.equals(de.hifiburn.converter.Format.WAV))
       _audioCodecId = CodecWrapperFactory.CODEC_ID_PCM_S16LE;
     else
-      throw new ConvertException("Nicht unterstützes Ausgabeformat.");
+      throw new ConvertException(Messages.JLibAVConverter_0);
 
     IMediaDecoder _md = null;
     IMediaEncoder _me = null;
@@ -54,7 +55,7 @@ public class JLibAVConverter implements IConverter
     try
     {
       _md = new DefaultMediaDecoder(_srcUrl); // open input file/stream
-      _me = new DefaultMediaEncoder(_dstUrl, "wav"); // open output file
+      _me = new DefaultMediaEncoder(_dstUrl, "wav"); // open output file  //$NON-NLS-1$
       _mr = _md.getMediaReader();
       _mw = _me.getMediaWriter();
 
@@ -99,7 +100,7 @@ public class JLibAVConverter implements IConverter
         }
         catch (LibavException ex)
         {
-          Logger.getLogger(JLibAVConverter.class.getName()).log(Level.WARNING, "Unbekanntes Packet", ex);
+          Logger.getLogger(JLibAVConverter.class.getName()).log(Level.WARNING, Messages.JLibAVConverter_1, ex);
         }
       }
       _md.flush();
@@ -108,7 +109,7 @@ public class JLibAVConverter implements IConverter
     }
     catch (Exception _e)
     {
-      Logger.getLogger(JLibAVConverter.class.getName()).log(Level.SEVERE, "Fehler bei Konvertierung", _e);
+      Logger.getLogger(JLibAVConverter.class.getName()).log(Level.SEVERE, Messages.JLibAVConverter_2, _e);
       throw new ConvertException(_e);
     }
     finally
@@ -122,7 +123,7 @@ public class JLibAVConverter implements IConverter
       }
       catch (Exception _e)
       {
-        Logger.getLogger(JLibAVConverter.class.getName()).log(Level.SEVERE, "Fehler bei Konvertierung", _e);
+        Logger.getLogger(JLibAVConverter.class.getName()).log(Level.SEVERE, Messages.JLibAVConverter_3, _e);
         throw new ConvertException(_e);
       }
     }
@@ -135,7 +136,7 @@ public class JLibAVConverter implements IConverter
     // check libav
     if (canConvert()==false)
       throw new ConvertException(
-          "LibAV konnte nicht geladen werden!\r\n\r\nBitte installieren Sie libAV (http://libav.org/download.html) und versuchen Sie es erneut.");
+          Messages.JLibAVConverter_4);
   }
 
   @Override
@@ -147,24 +148,24 @@ public class JLibAVConverter implements IConverter
   @Override
   public String getName()
   {
-    return "LibAV Konverter";
+    return Messages.JLibAVConverter_5;
   }
 
   @Override
   public String getId()
   {
-    return "libav";
+    return "libav";  //$NON-NLS-1$
   }
 
   @Override
   public List<String> getExtension()
   {
     List<String> _ret = new ArrayList<String>();
-    _ret.add("*.mp3");
-    _ret.add("*.wav");
-    _ret.add("*.flac");
-    _ret.add("*.ape");
-    _ret.add("*.aac");
+    _ret.add("*.mp3"); //$NON-NLS-1$
+    _ret.add("*.wav"); //$NON-NLS-1$
+    _ret.add("*.flac"); //$NON-NLS-1$
+    _ret.add("*.ape"); //$NON-NLS-1$
+    _ret.add("*.aac"); //$NON-NLS-1$
     
     return _ret;
   }

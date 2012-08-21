@@ -31,6 +31,7 @@ import de.hifiburn.filter.FilterException;
 import de.hifiburn.filter.IFilter;
 import de.hifiburn.filter.impl.CueFileFilter;
 import de.hifiburn.filter.impl.TocFileFilter;
+import de.hifiburn.i18n.Messages;
 import de.hifiburn.model.Project;
 import de.hifiburn.model.Track;
 import de.hifiburn.ui.swt.TextWidgetLogHandler;
@@ -86,13 +87,13 @@ public class ProjectManager
   public void initialize() throws IOException
   {
     // init logging
-    Logger _log = Logger.getLogger("");
+    Logger _log = Logger.getLogger(""); //$NON-NLS-1$
     for (Handler _h : _log.getHandlers())
       _log.removeHandler(_h);
     
     _log.setLevel(Level.INFO);
     _log.addHandler(new ConsoleHandler());
-    logfile = File.createTempFile("hifiburn", ".log");
+    logfile = File.createTempFile("hifiburn", ".log"); //$NON-NLS-1$ //$NON-NLS-2$
     FileHandler _fh = new FileHandler(logfile.getAbsolutePath(), 100000, 1, true);
     _fh.setFormatter(new SimpleFormatter());
     _log.addHandler(_fh);
@@ -141,8 +142,8 @@ public class ProjectManager
     {
       if (!_file.exists() || !_file.canRead())
       {
-        _errors.append(String.format("Datei %s konnte nicht gelesen werden.", _file.getAbsoluteFile()));
-        _errors.append("\n\r");
+        _errors.append(String.format(Messages.ProjectManager_0, _file.getAbsoluteFile()));
+        _errors.append("\n"); //$NON-NLS-1$
         continue;
       }
     }
@@ -171,7 +172,7 @@ public class ProjectManager
 
     try
     {
-      theMonitor.beginTask("", project.getDisc().getTracks().size()*2);
+      theMonitor.beginTask("", project.getDisc().getTracks().size()*2); //$NON-NLS-1$
       
       // first stage: convert
       for (Track _t : project.getDisc().getTracks())
@@ -179,7 +180,7 @@ public class ProjectManager
         if (!_t.getFile().exists() || !_t.getFile().canRead())
         {
           Logger.getLogger(ProjectManager.class.getName()).log(Level.SEVERE, 
-              String.format("Datei %s kann nicht gelesen werden!", _t.getFile().getAbsoluteFile()));
+              String.format(Messages.ProjectManager_1, _t.getFile().getAbsoluteFile()));
           _errors++;
           continue;
         }
@@ -188,30 +189,30 @@ public class ProjectManager
         if (_c==null)
         {
           Logger.getLogger(ProjectManager.class.getName()).log(Level.SEVERE, 
-              String.format("Kein Konvertierer für die Datei %s gefunden!", _t.getFile().getAbsoluteFile()));
+              String.format(Messages.ProjectManager_2, _t.getFile().getAbsoluteFile()));
           _errors++;
           continue;
         }
         if (!_c.canConvert())
         {
           Logger.getLogger(ProjectManager.class.getName()).log(Level.SEVERE, 
-              String.format("Der Konvertierer ist nicht bereit. Bitte prüfen Sie die Einstellungen."));
+              String.format(Messages.ProjectManager_3));
           return 1;
         }
         
-        theMonitor.subTask(String.format("Konvertiere %s",_t.getFile()));
+        theMonitor.subTask(String.format(Messages.ProjectManager_4,_t.getFile()));
         
         try
         {
           theMonitor.worked(1);
           if (theMonitor.isCanceled())
           {
-            Logger.getLogger(ProjectManager.class.getName()).log(Level.SEVERE,"Erstellen wurde abgebrochen");
+            Logger.getLogger(ProjectManager.class.getName()).log(Level.SEVERE,Messages.ProjectManager_5);
             return -1;
           }
           
-          File _tmp = File.createTempFile("hifiburn", ".wav");
-          Logger.getLogger(ProjectManager.class.getName()).log(Level.INFO, String.format("Starte Konvertierer %s.",
+          File _tmp = File.createTempFile("hifiburn", ".wav"); //$NON-NLS-1$ //$NON-NLS-2$
+          Logger.getLogger(ProjectManager.class.getName()).log(Level.INFO, String.format(Messages.ProjectManager_6,
               _c.getName()));
           
           _c.convert(_t.getFile(), _tmp, Format.WAV, 44100, 16);
@@ -221,14 +222,14 @@ public class ProjectManager
         catch (ConvertException _e)
         {
           Logger.getLogger(ProjectManager.class.getName()).log(Level.SEVERE, 
-              String.format("Fehler während der Konvertierung von %s (%s)!", _t.getFile().getAbsoluteFile(), _e.getMessage()));
+              String.format(Messages.ProjectManager_7, _t.getFile().getAbsoluteFile(), _e.getMessage()));
           _errors++;
           continue;
         }
         catch (IOException _e)
         {
           Logger.getLogger(ProjectManager.class.getName()).log(Level.SEVERE, 
-              String.format("Fehler während der Konvertierung von %s (%s)!", _t.getFile().getAbsoluteFile(), _e.getMessage()));
+              String.format(Messages.ProjectManager_8, _t.getFile().getAbsoluteFile(), _e.getMessage()));
           _errors++;
           continue;
         }
@@ -242,9 +243,9 @@ public class ProjectManager
           public void run() 
           {
             MessageDialog.openError(Display.getDefault().getActiveShell(), 
-                "Fehler", "Es wurden Fehler festgestellt, bitte prüfen Sie die Ausgaben im Log.");
+                Messages.ProjectManager_9, Messages.ProjectManager_10);
             Logger.getLogger(ProjectManager.class.getName()).log(Level.SEVERE,
-                "Erstellen wurde aufgrund von Fehlern abgebrochen");
+                Messages.ProjectManager_11);
             return;
           }
         });
@@ -264,21 +265,21 @@ public class ProjectManager
   {
     try
     {
-      theMonitor.beginTask("", theFilters.size());
+      theMonitor.beginTask("", theFilters.size()); //$NON-NLS-1$
       
       for (IFilter _filter : theFilters)
       {
-        theMonitor.subTask(String.format("Vorverarbeitung Filter %s",_filter.getName()));
+        theMonitor.subTask(String.format(Messages.ProjectManager_13,_filter.getName()));
         try
         {
-          Logger.getLogger(ProjectManager.class.getName()).log(Level.INFO, String.format("Starte Vorverarbeitung %s.",
+          Logger.getLogger(ProjectManager.class.getName()).log(Level.INFO, String.format(Messages.ProjectManager_14,
               _filter.getName()));
           _filter.doPreFiltering(theProject);
         }
         catch (FilterException _e)
         {
           Logger.getLogger(ProjectManager.class.getName()).log(Level.SEVERE, 
-              String.format("Fehler während der Nachverarbeitung durch %s (%s)!", _filter.getName(), _e.getMessage()));
+              String.format(Messages.ProjectManager_15, _filter.getName(), _e.getMessage()));
           throw _e;
         }
         theMonitor.worked(1);
@@ -294,21 +295,21 @@ public class ProjectManager
   {
     try
     {
-      theMonitor.beginTask("", theFilters.size());
+      theMonitor.beginTask("", theFilters.size()); //$NON-NLS-1$
       
       for (IFilter _filter : theFilters)
       {
-        theMonitor.subTask(String.format("Nachverarbeitung Filter %s",_filter.getName()));
+        theMonitor.subTask(String.format(Messages.ProjectManager_16,_filter.getName()));
         try
         {
-          Logger.getLogger(ProjectManager.class.getName()).log(Level.INFO, String.format("Starte Nachverarbeitung %s.",
+          Logger.getLogger(ProjectManager.class.getName()).log(Level.INFO, String.format(Messages.ProjectManager_17,
               _filter.getName()));
           _filter.doPostFiltering(theProject);
         }
         catch (FilterException _e)
         {
           Logger.getLogger(ProjectManager.class.getName()).log(Level.SEVERE, 
-              String.format("Fehler während der Nachverarbeitung durch %s (%s)!", _filter.getName(), _e.getMessage()));
+              String.format(Messages.ProjectManager_18, _filter.getName(), _e.getMessage()));
           throw _e;
         }
         theMonitor.worked(1);
@@ -320,25 +321,31 @@ public class ProjectManager
     }
   }
   
-  public void doBurn(IProgressMonitor theMonitor, Project theProject, IBurner theBurner) throws BurnerException
+  public void doBurn(IProgressMonitor theMonitor, final Project theProject, final IBurner theBurner) throws BurnerException
   {
     try
     {
-      theMonitor.beginTask("", 100);
+      theMonitor.beginTask("", 100); //$NON-NLS-1$
       
-      theMonitor.subTask(String.format("Brenne CD mit %s", theBurner.getName()));
+      theMonitor.subTask(String.format(Messages.ProjectManager_19, theBurner.getName()));
+      
+      Logger.getLogger(ProjectManager.class.getName()).log(Level.INFO, String.format(Messages.ProjectManager_20,
+            theBurner.getName()));
+      
+      theBurner.setMonitor(theMonitor);
+
       try
       {
-        Logger.getLogger(ProjectManager.class.getName()).log(Level.INFO, String.format("Starte Brennvorgang mit %s.",
-            theBurner.getName()));
+        
         theBurner.burn(theProject.getDisc());
       }
       catch (BurnerException _e)
       {
         Logger.getLogger(ProjectManager.class.getName()).log(Level.SEVERE, 
-            String.format("Fehler während des Brennens durch %s (%s)!", theBurner.getName(), _e.getMessage()));
+            String.format(Messages.ProjectManager_21, theBurner.getName(), _e.getMessage()));
         throw _e;
       }
+
     }
     finally
     {

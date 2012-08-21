@@ -55,7 +55,7 @@ public class Track extends AbstractModelObject
    */
   public void setNo(Integer theNo)
   {
-    firePropertyChange("no", no, no = theNo);
+    firePropertyChange("no", no, no = theNo); //$NON-NLS-1$
   }
 
   /**
@@ -71,7 +71,7 @@ public class Track extends AbstractModelObject
    */
   public void setTitle(String theTitle)
   {
-    firePropertyChange("title", title, title = theTitle);
+    firePropertyChange("title", title, title = theTitle); //$NON-NLS-1$
   }
 
   /**
@@ -87,7 +87,7 @@ public class Track extends AbstractModelObject
    */
   public void setDuration(Integer theDuration)
   {
-    firePropertyChange("duration", duration, duration = theDuration);
+    firePropertyChange("duration", duration, duration = theDuration); //$NON-NLS-1$
   }
 
   /**
@@ -103,7 +103,7 @@ public class Track extends AbstractModelObject
    */
   public void setInterpret(String theInterpret)
   {
-    firePropertyChange("interpret", interpret, interpret = theInterpret);
+    firePropertyChange("interpret", interpret, interpret = theInterpret); //$NON-NLS-1$
   }
 
   /**
@@ -119,7 +119,7 @@ public class Track extends AbstractModelObject
    */
   public void setSongwriter(String theSongwriter)
   {
-    firePropertyChange("songwriter", songwriter, songwriter = theSongwriter);
+    firePropertyChange("songwriter", songwriter, songwriter = theSongwriter); //$NON-NLS-1$
   }
 
   /**
@@ -135,7 +135,7 @@ public class Track extends AbstractModelObject
    */
   public void setFile(File theFile)
   {
-    firePropertyChange("file", file, file = theFile);
+    firePropertyChange("file", file, file = theFile); //$NON-NLS-1$
   }
 
   /**
@@ -151,7 +151,7 @@ public class Track extends AbstractModelObject
    */
   public void setAlbuminterpret(String theAlbuminterpret)
   {
-    firePropertyChange("albuminterpret", albuminterpret, albuminterpret = theAlbuminterpret);
+    firePropertyChange("albuminterpret", albuminterpret, albuminterpret = theAlbuminterpret); //$NON-NLS-1$
   }
 
   /**
@@ -167,7 +167,7 @@ public class Track extends AbstractModelObject
    */
   public void setAlbumtitle(String theAlbumtitle)
   {
-    firePropertyChange("albumtitle", albumtitle, albumtitle = theAlbumtitle);
+    firePropertyChange("albumtitle", albumtitle, albumtitle = theAlbumtitle); //$NON-NLS-1$
   }
 
   /**
@@ -183,7 +183,7 @@ public class Track extends AbstractModelObject
    */
   public void setWavfile(File theWavfile)
   {
-    firePropertyChange("wavfile", wavfile, wavfile = theWavfile);
+    firePropertyChange("wavfile", wavfile, wavfile = theWavfile); //$NON-NLS-1$
   }
 
   /**
@@ -199,7 +199,7 @@ public class Track extends AbstractModelObject
    */
   public void setCdtextfile(File theCdtextfile)
   {
-    firePropertyChange("cdtextfile", cdtextfile, cdtextfile = theCdtextfile);
+    firePropertyChange("cdtextfile", cdtextfile, cdtextfile = theCdtextfile); //$NON-NLS-1$
   }
 
   /**
@@ -215,7 +215,7 @@ public class Track extends AbstractModelObject
    */
   public void setIsrc(String theIsrc)
   {
-    firePropertyChange("isrc", isrc, isrc = theIsrc);
+    firePropertyChange("isrc", isrc, isrc = theIsrc); //$NON-NLS-1$
   }
 
   /**
@@ -231,7 +231,7 @@ public class Track extends AbstractModelObject
    */
   public void setPregap(int thePregap)
   {
-    firePropertyChange("pregap", pregap, pregap = thePregap);
+    firePropertyChange("pregap", pregap, pregap = thePregap); //$NON-NLS-1$
   }
   
   

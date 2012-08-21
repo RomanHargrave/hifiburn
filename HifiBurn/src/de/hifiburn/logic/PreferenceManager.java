@@ -13,10 +13,12 @@ import java.util.logging.Logger;
 
 import org.eclipse.jface.preference.PreferenceStore;
 
+import de.hifiburn.i18n.Messages;
+
 
 public class PreferenceManager extends Object
 {
-  public static final String PREFERENCE_FILE =  "hifiburn.properties";
+  public static final String PREFERENCE_FILE =  "hifiburn.properties"; //$NON-NLS-1$
 
   private static PreferenceManager instance = null;
   private PreferenceStore store = null;
@@ -25,11 +27,11 @@ public class PreferenceManager extends Object
   
   static 
   {
-    DEFAULTS.put(IPreferenceConstants.BASIC_AUDIOCONVERTER, "ffmpeg");
-    DEFAULTS.put(IPreferenceConstants.BASIC_BURNER, "cdrdao");
-    DEFAULTS.put(IPreferenceConstants.FFMPEG_PATH, "");
-    DEFAULTS.put(IPreferenceConstants.WODIM_PATH, "");
-    DEFAULTS.put(IPreferenceConstants.CDRDAO_PATH, "");
+    DEFAULTS.put(IPreferenceConstants.BASIC_AUDIOCONVERTER, "ffmpeg"); //$NON-NLS-1$
+    DEFAULTS.put(IPreferenceConstants.BASIC_BURNER, "cdrdao"); //$NON-NLS-1$
+    DEFAULTS.put(IPreferenceConstants.FFMPEG_PATH, ""); //$NON-NLS-1$
+    DEFAULTS.put(IPreferenceConstants.WODIM_PATH, ""); //$NON-NLS-1$
+    DEFAULTS.put(IPreferenceConstants.CDRDAO_PATH, ""); //$NON-NLS-1$
   }
   
   /**
@@ -47,7 +49,7 @@ public class PreferenceManager extends Object
     catch (IOException _e)
     {
       Logger.getLogger(ProjectManager.class.getName()).log(Level.SEVERE, 
-          String.format("Einstellungen konnten nicht gelesen werden!"));
+          String.format(Messages.PreferenceManager_0));
     }
   }
   

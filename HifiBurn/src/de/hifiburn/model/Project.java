@@ -19,7 +19,7 @@ public class Project extends AbstractModelObject
   public Project()
   {
     super();
-    name = "";
+    name = ""; //$NON-NLS-1$
     disc = new Disc();
   }
   
@@ -36,7 +36,7 @@ public class Project extends AbstractModelObject
    */
   public void setName(String theName)
   {
-    firePropertyChange("name", name, name = theName);
+    firePropertyChange("name", name, name = theName); //$NON-NLS-1$
   }
 
   /**
@@ -52,6 +52,6 @@ public class Project extends AbstractModelObject
    */
   public void setDisc(Disc theDisc)
   {
-    firePropertyChange("disc", disc, disc= theDisc);
+    firePropertyChange("disc", disc, disc= theDisc); //$NON-NLS-1$
   }
 }

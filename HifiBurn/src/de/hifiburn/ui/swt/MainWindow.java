@@ -72,6 +72,7 @@ import de.hifiburn.burner.BurnerException;
 import de.hifiburn.burner.IBurner;
 import de.hifiburn.filter.FilterException;
 import de.hifiburn.filter.IFilter;
+import de.hifiburn.i18n.Messages;
 import de.hifiburn.logic.AudioFileManager;
 import de.hifiburn.logic.BurnerManager;
 import de.hifiburn.logic.InitializeException;
@@ -153,12 +154,12 @@ public class MainWindow
         }
         catch (InitializeException _e)
         {
-          MessageDialog.openError(null, "Konfigurationsfehler", _e.getMessage());
+          MessageDialog.openError(null, Messages.MainWindow_0, _e.getMessage());
           Preferences.showPreferenceDialog(window.shell);
         }
         catch (IOException e)
         {
-          MessageDialog.openError(null, "Initialisierungsfehler", e.getMessage());
+          MessageDialog.openError(null, Messages.MainWindow_1, e.getMessage());
           System.exit(2);
         }
         catch (Exception e)
@@ -200,20 +201,20 @@ public class MainWindow
     shell.setMinimumSize(new Point(600, 500));
     shell.setImages(
         new Image[] {
-            SWTResourceManager.getImage(MainWindow.class, "/de/hifiburn/ui/icons/icon72.png"),
-            SWTResourceManager.getImage(MainWindow.class, "/de/hifiburn/ui/icons/icon48.png"),
-            SWTResourceManager.getImage(MainWindow.class, "/de/hifiburn/ui/icons/icon32.png"),
-            SWTResourceManager.getImage(MainWindow.class, "/de/hifiburn/ui/icons/icon16.png")});
+            SWTResourceManager.getImage(MainWindow.class, "/de/hifiburn/ui/icons/icon72.png"), //$NON-NLS-1$
+            SWTResourceManager.getImage(MainWindow.class, "/de/hifiburn/ui/icons/icon48.png"), //$NON-NLS-1$
+            SWTResourceManager.getImage(MainWindow.class, "/de/hifiburn/ui/icons/icon32.png"), //$NON-NLS-1$
+            SWTResourceManager.getImage(MainWindow.class, "/de/hifiburn/ui/icons/icon16.png")}); //$NON-NLS-1$
     shell.setSize(600, 500);
-    shell.setText("HifiBurn");
+    shell.setText(Messages.MainWindow_2);
     shell.setLayout(new BorderLayout(0, 0));
 
     tabFolder = new TabFolder(shell, SWT.NONE);
     tabFolder.setLayoutData(BorderLayout.CENTER);
 
     TabItem tbtmDisc = new TabItem(tabFolder, SWT.NONE);
-    tbtmDisc.setImage(SWTResourceManager.getImage(MainWindow.class, "/de/hifiburn/ui/icons/disc.png"));
-    tbtmDisc.setText("Disc");
+    tbtmDisc.setImage(SWTResourceManager.getImage(MainWindow.class, "/de/hifiburn/ui/icons/disc.png")); //$NON-NLS-1$
+    tbtmDisc.setText(Messages.MainWindow_3);
 
     Composite compDisc = new Composite(tabFolder, SWT.NONE);
     tbtmDisc.setControl(compDisc);
@@ -223,26 +224,26 @@ public class MainWindow
     compDisc.setLayout(fl_compDisc);
 
     Group grpCdtext = new Group(compDisc, SWT.NONE);
-    grpCdtext.setText("CD-Text");
+    grpCdtext.setText(Messages.MainWindow_4);
     grpCdtext.setLayout(new GridLayout(2, false));
 
     Label lblAlbum = new Label(grpCdtext, SWT.NONE);
     lblAlbum.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-    lblAlbum.setText("Album");
+    lblAlbum.setText(Messages.MainWindow_5);
 
     txtDiscAlbum = new Text(grpCdtext, SWT.BORDER);
     txtDiscAlbum.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
     Label lblInterpret = new Label(grpCdtext, SWT.NONE);
     lblInterpret.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-    lblInterpret.setText("Interpret");
+    lblInterpret.setText(Messages.MainWindow_6);
 
     txtDiscInterpret = new Text(grpCdtext, SWT.BORDER);
     txtDiscInterpret.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
     tbtmTracks = new TabItem(tabFolder, SWT.NONE);
-    tbtmTracks.setImage(SWTResourceManager.getImage(MainWindow.class, "/de/hifiburn/ui/icons/tracks.png"));
-    tbtmTracks.setText("Tracks");
+    tbtmTracks.setImage(SWTResourceManager.getImage(MainWindow.class, "/de/hifiburn/ui/icons/tracks.png")); //$NON-NLS-1$
+    tbtmTracks.setText(Messages.MainWindow_7);
 
     compTracks = new Composite(tabFolder, SWT.NONE);
     tbtmTracks.setControl(compTracks);
@@ -341,20 +342,20 @@ public class MainWindow
     TableColumn tblclmnInterpret = new TableColumn(tableTracks, SWT.NONE);
     tblclmnInterpret.setResizable(false);
     tblclmnInterpret.setWidth(100);
-    tblclmnInterpret.setText("Interpret");
+    tblclmnInterpret.setText(Messages.MainWindow_8);
 
     TableViewerColumn tableViewerColumn_1 = new TableViewerColumn(viewerTracks, SWT.NONE);
 
     TableColumn tblclmnTitel = tableViewerColumn_1.getColumn();
     tblclmnTitel.setResizable(false);
     tblclmnTitel.setWidth(10);
-    tblclmnTitel.setText("Titel");
+    tblclmnTitel.setText(Messages.MainWindow_9);
 
     TableViewerColumn tableViewerColumn_2 = new TableViewerColumn(viewerTracks, SWT.NONE);
     TableColumn tblclmnLaufzeit = tableViewerColumn_2.getColumn();
     tblclmnLaufzeit.setResizable(false);
     tblclmnLaufzeit.setWidth(75);
-    tblclmnLaufzeit.setText("Laufzeit");
+    tblclmnLaufzeit.setText(Messages.MainWindow_10);
 
     viewerTracks.setLabelProvider(new TrackListLabelProvider());
     viewerTracks.setContentProvider(new TrackListContentProvider());
@@ -363,12 +364,12 @@ public class MainWindow
     viewerTracks.setInput(disc.getTracks());
 
     grpTrack = new Group(compTracks, SWT.NONE);
-    grpTrack.setText("Track");
+    grpTrack.setText(Messages.MainWindow_11);
     grpTrack.setLayoutData(BorderLayout.SOUTH);
     grpTrack.setLayout(new GridLayout(3, false));
     
     Label lblInterpret_1 = new Label(grpTrack, SWT.NONE);
-    lblInterpret_1.setText("Interpret");
+    lblInterpret_1.setText(Messages.MainWindow_12);
 
     txtTrackInterpret = new Text(grpTrack, SWT.BORDER);
     txtTrackInterpret.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -384,11 +385,11 @@ public class MainWindow
         viewerTracks.refresh();
       }
     });
-    btnInterpretAll.setImage(SWTResourceManager.getImage(MainWindow.class, "/de/hifiburn/ui/icons/modifyall.png"));
+    btnInterpretAll.setImage(SWTResourceManager.getImage(MainWindow.class, "/de/hifiburn/ui/icons/modifyall.png")); //$NON-NLS-1$
 
     Label lblTitel = new Label(grpTrack, SWT.NONE);
     lblTitel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-    lblTitel.setText("Titel");
+    lblTitel.setText(Messages.MainWindow_13);
 
     txtTrackTitle = new Text(grpTrack, SWT.BORDER);
     txtTrackTitle.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -403,11 +404,11 @@ public class MainWindow
         viewerTracks.refresh();
       }
     });
-    btnTitleAll.setImage(SWTResourceManager.getImage(MainWindow.class, "/de/hifiburn/ui/icons/modifyall.png"));
+    btnTitleAll.setImage(SWTResourceManager.getImage(MainWindow.class, "/de/hifiburn/ui/icons/modifyall.png")); //$NON-NLS-1$
     
     TabItem tbtmLog = new TabItem(tabFolder, SWT.NONE);
-    tbtmLog.setImage(SWTResourceManager.getImage(MainWindow.class, "/de/hifiburn/ui/icons/log.png"));
-    tbtmLog.setText("Log");
+    tbtmLog.setImage(SWTResourceManager.getImage(MainWindow.class, "/de/hifiburn/ui/icons/log.png")); //$NON-NLS-1$
+    tbtmLog.setText(Messages.MainWindow_15);
     
     Composite compLog = new Composite(tabFolder, SWT.NONE);
     tbtmLog.setControl(compLog);
@@ -419,7 +420,7 @@ public class MainWindow
     
     Label lblDatei = new Label(composite, SWT.NONE);
     lblDatei.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-    lblDatei.setText("Datei");
+    lblDatei.setText(Messages.MainWindow_16);
     
     txtLogFile = new Text(composite, SWT.BORDER);
     txtLogFile.setEditable(false);
@@ -451,10 +452,9 @@ public class MainWindow
         ToolBar toolBar = new ToolBar(composite_2, SWT.FLAT | SWT.RIGHT);
         
             ToolItem tltmNewDisc = new ToolItem(toolBar, SWT.NONE);
-            tltmNewDisc.setImage(SWTResourceManager.getImage(MainWindow.class, "/de/hifiburn/ui/icons/newdisc.png"));
-            tltmNewDisc.setToolTipText("Neue Disc erstellen");
+            tltmNewDisc.setImage(SWTResourceManager.getImage(MainWindow.class, "/de/hifiburn/ui/icons/newdisc.png")); //$NON-NLS-1$
+            tltmNewDisc.setToolTipText(Messages.MainWindow_17);
             
-                @SuppressWarnings("unused")
                 ToolItem toolItem = new ToolItem(toolBar, SWT.SEPARATOR);
                 
                     ToolItem tltmAddTracks = new ToolItem(toolBar, SWT.NONE);
@@ -466,8 +466,8 @@ public class MainWindow
                         addTracks();
                       }
                     });
-                    tltmAddTracks.setToolTipText("Tracks hinzufügen");
-                    tltmAddTracks.setImage(SWTResourceManager.getImage(MainWindow.class, "/de/hifiburn/ui/icons/addtrack.png"));
+                    tltmAddTracks.setToolTipText(Messages.MainWindow_18);
+                    tltmAddTracks.setImage(SWTResourceManager.getImage(MainWindow.class, "/de/hifiburn/ui/icons/addtrack.png")); //$NON-NLS-1$
                     
                     ToolBar toolBar_1 = new ToolBar(composite_2, SWT.FLAT | SWT.RIGHT);
                     toolBar_1.setLayoutData(BorderLayout.EAST);
@@ -480,8 +480,8 @@ public class MainWindow
                         setEnabledState();
                       }
                     });
-                    toolItem_2.setToolTipText("Einstellungen anzeigen");
-                    toolItem_2.setImage(SWTResourceManager.getImage(MainWindow.class, "/de/hifiburn/ui/icons/settings.png"));
+                    toolItem_2.setToolTipText(Messages.MainWindow_19);
+                    toolItem_2.setImage(SWTResourceManager.getImage(MainWindow.class, "/de/hifiburn/ui/icons/settings.png")); //$NON-NLS-1$
                     
                     ToolItem toolItem_1 = new ToolItem(toolBar_1, SWT.SEPARATOR);
                     
@@ -503,21 +503,21 @@ public class MainWindow
                               if (_burner==null)
                               {
                                 Logger.getLogger(ProjectManager.class.getName()).log(Level.SEVERE, 
-                                    String.format("Konnte Brenn-Backend nicht finden. Bitte prüfen Sie die Konfiguration"));
-                                throw new InvocationTargetException(new Exception("Konnte Brenn-Backend nicht finden."));
+                                    String.format(Messages.MainWindow_21));
+                                throw new InvocationTargetException(new Exception(Messages.MainWindow_22));
                               }
                               if (!_burner.canBurn())
                               {
                                 Logger.getLogger(ProjectManager.class.getName()).log(Level.SEVERE, 
-                                    String.format("Das Brenn-Backend ist nicht bereit zum brennen. Bitte prüfen Sie die Konfiguration."));
+                                    String.format(Messages.MainWindow_23));
                                 throw new InvocationTargetException(
-                                    new Exception("Das Brenn-Backend ist nicht bereit zum brennen. Bitte prüfen Sie die Konfiguration."));
+                                    new Exception(Messages.MainWindow_24));
                               }
 
                               List<IFilter> _preFilters = BurnerManager.getInstance().getPreFilters(_burner);
                               List<IFilter> _postFilters = BurnerManager.getInstance().getPostFilters(_burner);
                               
-                              theMonitor.beginTask("Konvertiere Audiodateien",
+                              theMonitor.beginTask(Messages.MainWindow_25,
                                   (project.getDisc().getTracks().size()*2)+100+_preFilters.size()+_postFilters.size());
                               
                               if (ProjectManager.getInstance().convertAudioFiles(
@@ -547,15 +547,19 @@ public class MainWindow
                               for (Track _t : disc.getTracks())
                               {
                                 if (_t.getWavfile()!=null && _t.getWavfile().exists())
+                                {
                                   _t.getWavfile().delete();
+                                  _t.setWavfile(null);
+                                }
+                                
                               }
                             }
                           });
                         } 
                         catch (InvocationTargetException _e) 
                         {
-                          MessageDialog.openError(shell, "Fehler", 
-                              _e.getCause().getMessage() + "\nBitte prüfen Sie das Log.");
+                          MessageDialog.openError(shell, Messages.MainWindow_26, 
+                              _e.getCause().getMessage() + Messages.MainWindow_27);
                           tabFolder.setSelection(2);
                         } 
                         catch (InterruptedException _e) 
@@ -563,8 +567,8 @@ public class MainWindow
                         }
                       }
                     });
-                    tltmBurn.setImage(SWTResourceManager.getImage(MainWindow.class, "/de/hifiburn/ui/icons/burn.png"));
-                    tltmBurn.setText("CD brennen");
+                    tltmBurn.setImage(SWTResourceManager.getImage(MainWindow.class, "/de/hifiburn/ui/icons/burn.png")); //$NON-NLS-1$
+                    tltmBurn.setText(Messages.MainWindow_28);
                     
                     setEnabledState();
   }
@@ -585,14 +589,14 @@ public class MainWindow
   protected void addTracks()
   {
     FileDialog _fd = new FileDialog(shell, SWT.OPEN | SWT.MULTI);
-    _fd.setText("Tracks hinzufügen");
-    _fd.setFilterPath(System.getProperty("user.home"));
+    _fd.setText(Messages.MainWindow_29);
+    _fd.setFilterPath(System.getProperty("user.home")); //$NON-NLS-1$
     List<String> _exts = new ArrayList<String>(AudioFileManager.getInstance().getExtensions());
     StringBuilder _sb = new StringBuilder();
     for (String _s : _exts)
     {
       _sb.append(_s);
-      _sb.append(";");
+      _sb.append(";"); //$NON-NLS-1$
     }
     _exts.add(0,_sb.toString());
     
@@ -617,7 +621,7 @@ public class MainWindow
       }
       catch (IOException _e)
       {
-        MessageDialog.openError(shell, "Fehler beim Hinzufügen von Tracks", _e.getMessage());
+        MessageDialog.openError(shell, Messages.MainWindow_32, _e.getMessage());
       }
 
       String _albumtitle = null;
@@ -644,8 +648,8 @@ public class MainWindow
         }
         else
         {
-          if (MessageDialog.openConfirm(shell, "Frage",
-              String.format("Soll der Titel der Disc auf \"%s\" geändert werden?", _albumtitle)))
+          if (MessageDialog.openConfirm(shell, Messages.MainWindow_33,
+              String.format(Messages.MainWindow_34, _albumtitle)))
           {
             disc.setAlbum(disc.getTracks().get(0).getAlbumtitle());
           }
@@ -660,8 +664,8 @@ public class MainWindow
         }
         else
         {
-          if (MessageDialog.openConfirm(shell, "Frage",
-              String.format("Soll der Interpret der Disc auf \"%s\" geändert werden?", _albuminterpret)))
+          if (MessageDialog.openConfirm(shell, Messages.MainWindow_35,
+              String.format(Messages.MainWindow_36, _albuminterpret)))
           {
             disc.setInterpret(disc.getTracks().get(0).getAlbuminterpret());
           }
@@ -678,20 +682,20 @@ public class MainWindow
     DataBindingContext bindingContext = new DataBindingContext();
     //
     IObservableValue observeTextTxtDiscAlbumObserveWidget = WidgetProperties.text(SWT.Modify).observe(txtDiscAlbum);
-    IObservableValue albumDiscObserveValue = BeanProperties.value("album").observe(disc);
+    IObservableValue albumDiscObserveValue = BeanProperties.value("album").observe(disc); //$NON-NLS-1$
     bindingContext.bindValue(observeTextTxtDiscAlbumObserveWidget, albumDiscObserveValue, null, null);
     //
     IObservableValue observeTextTxtDiscInterpretObserveWidget = WidgetProperties.text(SWT.Modify).observe(txtDiscInterpret);
-    IObservableValue interpretDiscObserveValue = BeanProperties.value("interpret").observe(disc);
+    IObservableValue interpretDiscObserveValue = BeanProperties.value("interpret").observe(disc); //$NON-NLS-1$
     bindingContext.bindValue(observeTextTxtDiscInterpretObserveWidget, interpretDiscObserveValue, null, null);
     //
     IObservableValue observeSingleSelectionViewerTracks = ViewerProperties.singleSelection().observe(viewerTracks);
-    IObservableValue viewerTracksInterpretObserveDetailValue = BeanProperties.value(Track.class, "interpret", String.class).observeDetail(observeSingleSelectionViewerTracks);
+    IObservableValue viewerTracksInterpretObserveDetailValue = BeanProperties.value(Track.class, "interpret", String.class).observeDetail(observeSingleSelectionViewerTracks); //$NON-NLS-1$
     IObservableValue observeTextTxtTrackInterpretObserveWidget = WidgetProperties.text(SWT.Modify).observe(txtTrackInterpret);
     bindingContext.bindValue(viewerTracksInterpretObserveDetailValue, observeTextTxtTrackInterpretObserveWidget, null, new TrackViewerUpdateValueStrategy());
     //
     IObservableValue observeSingleSelectionViewerTracks_1 = ViewerProperties.singleSelection().observe(viewerTracks);
-    IObservableValue viewerTracksTitleObserveDetailValue = BeanProperties.value(Track.class, "title", String.class).observeDetail(observeSingleSelectionViewerTracks_1);
+    IObservableValue viewerTracksTitleObserveDetailValue = BeanProperties.value(Track.class, "title", String.class).observeDetail(observeSingleSelectionViewerTracks_1); //$NON-NLS-1$
     IObservableValue observeTextTxtTrackTitleObserveWidget = WidgetProperties.text(SWT.Modify).observe(txtTrackTitle);
     bindingContext.bindValue(viewerTracksTitleObserveDetailValue, observeTextTxtTrackTitleObserveWidget, null, new TrackViewerUpdateValueStrategy());
     //

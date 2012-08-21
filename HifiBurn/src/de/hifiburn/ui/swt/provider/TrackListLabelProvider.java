@@ -19,7 +19,7 @@ public class TrackListLabelProvider extends LabelProvider implements ITableLabel
     // each element comes from the ContentProvider.getElements(Object)
     if (!(theElement instanceof Track))
     {
-      return "";
+      return ""; //$NON-NLS-1$
     }
 
     Track _track = (Track) theElement;
@@ -36,12 +36,12 @@ public class TrackListLabelProvider extends LabelProvider implements ITableLabel
         int _hours = _track.getDuration() / 3600;
         int _minutes = (_track.getDuration() / 60) % 60;
         int _seconds = _track.getDuration() % 60;
-        return String.format("%02d:%02d:%02d",_hours,_minutes,_seconds);
+        return String.format("%02d:%02d:%02d",_hours,_minutes,_seconds); //$NON-NLS-1$
       }
       default:
         break;
     }
-    return "";
+    return ""; //$NON-NLS-1$
   }
 
   @Override

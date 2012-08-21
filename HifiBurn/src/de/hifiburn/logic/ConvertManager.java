@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import de.hifiburn.converter.ConvertException;
 import de.hifiburn.converter.Format;
 import de.hifiburn.converter.IConverter;
+import de.hifiburn.i18n.Messages;
 
 
 public class ConvertManager
@@ -43,7 +44,7 @@ public class ConvertManager
     if (theConverter!=null)
     {
       Logger.getLogger(ConvertManager.class.getName()).log(Level.INFO,
-          String.format("Initialisiere Audiokonverter %s",theConverter.getName()));
+          String.format(Messages.ConvertManager_0,theConverter.getName()));
       try
       {
         theConverter.initialize();

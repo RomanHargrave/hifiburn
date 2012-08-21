@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 
 import de.hifiburn.converter.ConvertException;
 import de.hifiburn.filter.IFilter;
+import de.hifiburn.i18n.Messages;
 
 
 public class FilterManager
@@ -41,7 +42,7 @@ public class FilterManager
     if (theFilter!=null)
     {
       Logger.getLogger(FilterManager.class.getName()).log(Level.INFO,
-          String.format("Initialisiere Audiofilter %s",theFilter.getName()));
+          String.format(Messages.FilterManager_0,theFilter.getName()));
       filter.add(theFilter);
     }
   }

@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 import de.hifiburn.converter.ConvertException;
 import de.hifiburn.converter.Format;
 import de.hifiburn.converter.IConverter;
+import de.hifiburn.i18n.Messages;
 import de.hifiburn.logic.IPreferenceConstants;
 import de.hifiburn.logic.InitializeException;
 import de.hifiburn.logic.PreferenceManager;
@@ -31,7 +32,7 @@ public class FFMpegConverter implements IConverter
   {
     if (canConvert()==false)
       throw new InitializeException(
-          "FFMpeg konnte nicht gefunden werden!\r\n\r\nBitte installieren Sie FFMpeg (http://ffmpeg.org/download.html) und passen den Pfad in den Einstellungen an.");
+          Messages.FFMpegConverter_0);
   }
 
   @Override
@@ -39,27 +40,27 @@ public class FFMpegConverter implements IConverter
       throws ConvertException
   {
     List<String> _args = new ArrayList<String>();
-    _args.add("-i");
+    _args.add("-i"); //$NON-NLS-1$
     _args.add(theInput.getAbsolutePath());
-    _args.add("-acodec");
+    _args.add("-acodec"); //$NON-NLS-1$
 
     if (theFormat.equals(Format.WAV))
-      _args.add("pcm_s16le");
+      _args.add("pcm_s16le"); //$NON-NLS-1$
     else
-      _args.add("pcm_s16le");
+      _args.add("pcm_s16le"); //$NON-NLS-1$
 
     // overwrite
-    _args.add("-y");
+    _args.add("-y"); //$NON-NLS-1$
     
     // verbose
-    _args.add("-loglevel");
-    _args.add("info");
+    _args.add("-loglevel"); //$NON-NLS-1$
+    _args.add("info"); //$NON-NLS-1$
     
-    _args.add("-sample_fmt");
-    _args.add("s"+String.valueOf(theSamplerate));
+    _args.add("-sample_fmt"); //$NON-NLS-1$
+    _args.add("s"+String.valueOf(theSamplerate)); //$NON-NLS-1$
 
-    _args.add("-filter");
-    _args.add("aresample=" + theBitrate);
+    _args.add("-filter"); //$NON-NLS-1$
+    _args.add("aresample=" + theBitrate); //$NON-NLS-1$
 
     _args.add(theOutput.getAbsolutePath());
 
@@ -68,14 +69,14 @@ public class FFMpegConverter implements IConverter
       int _ret = execFFmpeg(_args);
       if (_ret != 0)
       {
-        Logger.getLogger(FFMpegConverter.class.getName()).log(Level.SEVERE, "Fehler bei Konvertierung",
-            String.format("FFMpeg hat einen Fehler gemeldet (%d)", _ret));
-        throw new ConvertException(String.format("FFMpeg hat einen Fehler gemeldet (%d)", _ret));
+        Logger.getLogger(FFMpegConverter.class.getName()).log(Level.SEVERE, Messages.FFMpegConverter_1,
+            String.format(Messages.FFMpegConverter_2, _ret));
+        throw new ConvertException(String.format(Messages.FFMpegConverter_3, _ret));
       }
     }
     catch (IOException _e)
     {
-      Logger.getLogger(FFMpegConverter.class.getName()).log(Level.SEVERE, "Fehler bei Konvertierung", _e);
+      Logger.getLogger(FFMpegConverter.class.getName()).log(Level.SEVERE, Messages.FFMpegConverter_4, _e);
       throw new ConvertException(_e);
     }
   }
@@ -93,16 +94,16 @@ public class FFMpegConverter implements IConverter
 
     String _path = PreferenceManager.getInstance().getString(IPreferenceConstants.FFMPEG_PATH);
     if (_path.trim().length() != 0)
-      _tmp.add(_path + File.separatorChar + "ffmpeg");
+      _tmp.add(_path + File.separatorChar + "ffmpeg"); //$NON-NLS-1$
     else
-      _tmp.add("ffmpeg");
+      _tmp.add("ffmpeg"); //$NON-NLS-1$
 
     if (theArguments != null)
       _tmp.addAll(theArguments);
 
     ProcessBuilder _builder = new ProcessBuilder(_tmp);
 
-    Logger.getLogger(FFMpegConverter.class.getName()).log(Level.INFO,String.format("FFMpeg Command: %s",getCommand(_tmp)));
+    Logger.getLogger(FFMpegConverter.class.getName()).log(Level.INFO,String.format("FFMpeg Command: %s",getCommand(_tmp))); //$NON-NLS-1$
     _builder.redirectErrorStream(true);
     Process _p = _builder.start();
 
@@ -112,12 +113,12 @@ public class FFMpegConverter implements IConverter
     {
       String _out = _s.nextLine();
       _sb.append(_out);
-      _sb.append("\n");
+      _sb.append("\n"); //$NON-NLS-1$
       
     }
     _s.close();
 
-    Logger.getLogger(FFMpegConverter.class.getName()).log(Level.INFO, String.format("FFMpeg Output: %s",_sb.toString()));
+    Logger.getLogger(FFMpegConverter.class.getName()).log(Level.INFO, String.format("FFMpeg Output: %s",_sb.toString())); //$NON-NLS-1$
     
     try
     {
@@ -133,13 +134,13 @@ public class FFMpegConverter implements IConverter
   @Override
   public String getName()
   {
-    return "FFMpeg Konverter";
+    return Messages.FFMpegConverter_5;
   }
 
   @Override
   public String getId()
   {
-    return "ffmpeg";
+    return "ffmpeg"; //$NON-NLS-1$
   }
 
   public String getCommand(List<String> theCommands)
@@ -158,13 +159,13 @@ public class FFMpegConverter implements IConverter
         {
           _cmdbuf.append('"');
           _cmdbuf.append(s);
-          if (s.endsWith("\\"))
+          if (s.endsWith("\\"))  //$NON-NLS-1$
           {
-            _cmdbuf.append("\\");
+            _cmdbuf.append("\\");  //$NON-NLS-1$
           }
           _cmdbuf.append('"');
         }
-        else if (s.endsWith("\""))
+        else if (s.endsWith("\""))  //$NON-NLS-1$
         {
           /* The argument has already been quoted. */
           _cmdbuf.append(s);
@@ -187,11 +188,11 @@ public class FFMpegConverter implements IConverter
   public List<String> getExtension()
   {
     List<String> _ret = new ArrayList<String>();
-    _ret.add("*.mp3");
-    _ret.add("*.wav");
-    _ret.add("*.flac");
-    _ret.add("*.ape");
-    _ret.add("*.aac");
+    _ret.add("*.mp3");  //$NON-NLS-1$
+    _ret.add("*.wav");  //$NON-NLS-1$
+    _ret.add("*.flac");  //$NON-NLS-1$
+    _ret.add("*.ape");  //$NON-NLS-1$
+    _ret.add("*.aac"); //$NON-NLS-1$
     
     return _ret;
   }
@@ -201,7 +202,7 @@ public class FFMpegConverter implements IConverter
   {
     try
     {
-      execFFmpeg(Arrays.asList(new String[] { "-version" }));
+      execFFmpeg(Arrays.asList(new String[] { "-version" }));  //$NON-NLS-1$
     }
     catch (IOException _e)
     {

@@ -16,6 +16,7 @@ import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.preference.PreferenceStore;
 import org.eclipse.swt.widgets.Shell;
 
+import de.hifiburn.i18n.Messages;
 import de.hifiburn.logic.BurnerManager;
 import de.hifiburn.logic.ConvertManager;
 
@@ -58,37 +59,37 @@ public class Preferences
     PreferenceManager _mgr = new PreferenceManager();
     
     PreferencePage _p = new BasicPreferencePage();
-    PreferenceNode _basicNode = new PreferenceNode("basic",_p);
+    PreferenceNode _basicNode = new PreferenceNode("basic",_p); //$NON-NLS-1$
     _mgr.addToRoot(_basicNode);
     
-    _p = new InformationPreferencePage("Hier können Sie Optionen für die Brenn-Backends festlegen.");
-    _p.setTitle("Brenn-Backends");
-    PreferenceNode _burnerNode = new PreferenceNode("burner",_p);
+    _p = new InformationPreferencePage(Messages.Preferences_0);
+    _p.setTitle(Messages.Preferences_1);
+    PreferenceNode _burnerNode = new PreferenceNode("burner",_p); //$NON-NLS-1$
     _mgr.addToRoot(_burnerNode);
 
     // WodimBurner
-    if (BurnerManager.getInstance().getBurner("wodim")!=null)
+    if (BurnerManager.getInstance().getBurner("wodim")!=null) //$NON-NLS-1$
     {
-      PreferenceNode _wodimNode = new PreferenceNode("wodim",new WodimPreferencePage());
+      PreferenceNode _wodimNode = new PreferenceNode("wodim",new WodimPreferencePage()); //$NON-NLS-1$
       _mgr.addTo(_burnerNode.getId(), _wodimNode);
     }
     
     // CdrdaoBurner
-    if (BurnerManager.getInstance().getBurner("cdrdao")!=null)
+    if (BurnerManager.getInstance().getBurner("cdrdao")!=null) //$NON-NLS-1$
     {
-      PreferenceNode _cdrdaoNode = new PreferenceNode("cdrdao",new CdrdaoPreferencePage());
+      PreferenceNode _cdrdaoNode = new PreferenceNode("cdrdao",new CdrdaoPreferencePage()); //$NON-NLS-1$
       _mgr.addTo(_burnerNode.getId(), _cdrdaoNode);
     }
     
-    _p = new InformationPreferencePage("Hier können Sie Optionen für die Konvertierung der Tracks festlegen.");
-    _p.setTitle("Audiokonverter");
-    PreferenceNode _converterNode = new PreferenceNode("converter",_p);
+    _p = new InformationPreferencePage(Messages.Preferences_2);
+    _p.setTitle(Messages.Preferences_3);
+    PreferenceNode _converterNode = new PreferenceNode("converter",_p); //$NON-NLS-1$
     _mgr.addToRoot(_converterNode);
     
-    if (ConvertManager.getInstance().getConverter("ffmpeg")!=null)
+    if (ConvertManager.getInstance().getConverter("ffmpeg")!=null) //$NON-NLS-1$
     {
       // FFMpegConverter
-      PreferenceNode _ffmpegNode = new PreferenceNode("ffmpeg",new FFMpegPreferencePage());
+      PreferenceNode _ffmpegNode = new PreferenceNode("ffmpeg",new FFMpegPreferencePage()); //$NON-NLS-1$
       _mgr.addTo(_converterNode.getId(), _ffmpegNode);
     }
     

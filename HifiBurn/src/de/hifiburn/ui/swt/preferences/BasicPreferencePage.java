@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Label;
 
 import de.hifiburn.burner.IBurner;
 import de.hifiburn.converter.IConverter;
+import de.hifiburn.i18n.Messages;
 import de.hifiburn.logic.BurnerManager;
 import de.hifiburn.logic.ConvertManager;
 import de.hifiburn.logic.IPreferenceConstants;
@@ -30,7 +31,7 @@ public class BasicPreferencePage extends PreferencePage
   @Override
   public String getTitle()
   {
-    return "HifiBurn";
+    return Messages.BasicPreferencePage_0;
   }
 
   //Text fields for user to enter preferences
@@ -47,7 +48,7 @@ public class BasicPreferencePage extends PreferencePage
 
     
     // converter combo
-    new Label(_composite, SWT.LEFT).setText("Audiokonverter");
+    new Label(_composite, SWT.LEFT).setText(Messages.BasicPreferencePage_1);
     comboConverter = new Combo(_composite, SWT.BORDER | SWT.READ_ONLY);
     comboConverter.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
     
@@ -69,7 +70,7 @@ public class BasicPreferencePage extends PreferencePage
       comboConverter.select(_select);
     
     // Burner combo
-    new Label(_composite, SWT.LEFT).setText("Brenn-Backend");
+    new Label(_composite, SWT.LEFT).setText(Messages.BasicPreferencePage_2);
     comboBurner = new Combo(_composite, SWT.BORDER | SWT.READ_ONLY);
     comboBurner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 

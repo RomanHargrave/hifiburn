@@ -42,7 +42,7 @@ public class Disc extends AbstractModelObject
    */
   public void setAlbum(String theAlbum)
   {
-    firePropertyChange("album", album, album = theAlbum);
+    firePropertyChange("album", album, album = theAlbum); //$NON-NLS-1$
   }
 
   /**
@@ -58,7 +58,7 @@ public class Disc extends AbstractModelObject
    */
   public void setInterpret(String theInterpret)
   {
-    firePropertyChange("interpret", interpret, interpret = theInterpret);
+    firePropertyChange("interpret", interpret, interpret = theInterpret); //$NON-NLS-1$
   }
 
   public List<Track> getTracks() 
@@ -113,7 +113,7 @@ public class Disc extends AbstractModelObject
    */
   public void setCuefile(File theCuefile)
   {
-    firePropertyChange("cuefile", cuefile, cuefile = theCuefile);
+    firePropertyChange("cuefile", cuefile, cuefile = theCuefile); //$NON-NLS-1$
   }
 
   /**
@@ -129,7 +129,7 @@ public class Disc extends AbstractModelObject
    */
   public void setSongwriter(String theSongwriter)
   {
-    firePropertyChange("songwriter", songwriter, songwriter = theSongwriter);
+    firePropertyChange("songwriter", songwriter, songwriter = theSongwriter); //$NON-NLS-1$
   }
 
   /**
@@ -145,7 +145,7 @@ public class Disc extends AbstractModelObject
    */
   public void setCatalognumber(String theCatalognumber)
   {
-    firePropertyChange("catalognumber", catalognumber, catalognumber = theCatalognumber);
+    firePropertyChange("catalognumber", catalognumber, catalognumber = theCatalognumber); //$NON-NLS-1$
   }
 
   /**
@@ -161,6 +161,6 @@ public class Disc extends AbstractModelObject
    */
   public void setTocfile(File theTocfile)
   {
-    firePropertyChange("tocfile", tocfile, tocfile = theTocfile);
+    firePropertyChange("tocfile", tocfile, tocfile = theTocfile); //$NON-NLS-1$
   }
 }

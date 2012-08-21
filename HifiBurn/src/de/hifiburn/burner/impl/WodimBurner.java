@@ -19,8 +19,11 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+
 import de.hifiburn.burner.BurnerException;
 import de.hifiburn.burner.IBurner;
+import de.hifiburn.i18n.Messages;
 import de.hifiburn.logic.ICommandListener;
 import de.hifiburn.logic.IPreferenceConstants;
 import de.hifiburn.logic.InitializeException;
@@ -39,19 +42,19 @@ public class WodimBurner implements IBurner
 
     try
     {
-      execWodim(Arrays.asList(new String[] { "-version" }), null);
+      execWodim(Arrays.asList(new String[] { "-version" }), null); //$NON-NLS-1$
     }
     catch (IOException _e)
     {
       throw new InitializeException(
-          "Wodim konnte nicht gefunden werden!\r\n\r\nBitte installieren Sie Wodim und passen den Pfad in den Einstellungen an.");
+          Messages.WodimBurner_0);
     }
     
     if (PreferenceManager.getInstance().getString(IPreferenceConstants.WODIM_DEVICE)==null || 
         PreferenceManager.getInstance().getString(IPreferenceConstants.WODIM_DEVICE).trim().length()==0)
     {
       throw new InitializeException(
-          "Es wurde noch kein Brenner für Wodim ausgewählt. Bitte wählen Sie einen Brenner aus!");
+          Messages.WodimBurner_1);
     }
    
   }
@@ -61,16 +64,16 @@ public class WodimBurner implements IBurner
   {
     List<String> _args = new ArrayList<String>();
     
-    _args.add("-text");
-    _args.add("-dao");
-    _args.add("-pad");
+    _args.add("-text"); //$NON-NLS-1$
+    _args.add("-dao"); //$NON-NLS-1$
+    _args.add("-pad"); //$NON-NLS-1$
     
 
-    _args.add("driver=cdr_simul");
+    _args.add("driver=cdr_simul"); //$NON-NLS-1$
     
-    _args.add(String.format("dev='%s'",PreferenceManager.getInstance().getString(IPreferenceConstants.WODIM_DEVICE)));
+    _args.add(String.format("dev='%s'",PreferenceManager.getInstance().getString(IPreferenceConstants.WODIM_DEVICE))); //$NON-NLS-1$
     
-    _args.add(String.format("cuefile=\"%s\"", theDisc.getCuefile().getAbsoluteFile()));
+    _args.add(String.format("cuefile=\"%s\"", theDisc.getCuefile().getAbsoluteFile())); //$NON-NLS-1$
     
     
     
@@ -79,14 +82,14 @@ public class WodimBurner implements IBurner
       int _ret = execWodim(_args, null);
       if (_ret != 0)
       {
-        Logger.getLogger(WodimBurner.class.getName()).log(Level.SEVERE, "Fehler während des Brennvorgangs",
-            String.format("Wodium hat einen Fehler gemeldet (%d)", _ret));
-        throw new BurnerException(String.format("Wodim hat einen Fehler gemeldet (%d)", _ret));
+        Logger.getLogger(WodimBurner.class.getName()).log(Level.SEVERE, Messages.WodimBurner_2,
+            String.format(Messages.WodimBurner_3, _ret));
+        throw new BurnerException(String.format(Messages.WodimBurner_4, _ret));
       }
     }
     catch (IOException _e)
     {
-      Logger.getLogger(WodimBurner.class.getName()).log(Level.SEVERE, "Fehler während des Brennvorgangs", _e);
+      Logger.getLogger(WodimBurner.class.getName()).log(Level.SEVERE, Messages.WodimBurner_5, _e);
       throw new BurnerException(_e);
     }
   }
@@ -99,16 +102,16 @@ public class WodimBurner implements IBurner
 
     String _path = PreferenceManager.getInstance().getString(IPreferenceConstants.WODIM_PATH);
     if (_path.trim().length() != 0)
-      _tmp.add(_path + File.separatorChar + "wodim");
-    else
-      _tmp.add("wodim");
+      _tmp.add(_path + File.separatorChar + "wodim"); //$NON-NLS-1$
+    else 
+      _tmp.add("wodim"); //$NON-NLS-1$
 
     if (theArguments != null)
       _tmp.addAll(theArguments);
 
     ProcessBuilder _builder = new ProcessBuilder(_tmp);
 
-    Logger.getLogger(WodimBurner.class.getName()).log(Level.INFO,String.format("Wodim Command: %s",getCommand(_tmp)));
+    Logger.getLogger(WodimBurner.class.getName()).log(Level.INFO,String.format("Wodim Command: %s",getCommand(_tmp))); //$NON-NLS-1$
     _builder.redirectErrorStream(true);
     Process _p = _builder.start();
 
@@ -122,11 +125,11 @@ public class WodimBurner implements IBurner
         theListener.newLine(_out);
       
       _sb.append(_out);
-      _sb.append("\n");
+      _sb.append("\n"); //$NON-NLS-1$
     }
     _s.close();
 
-    Logger.getLogger(WodimBurner.class.getName()).log(Level.INFO, String.format("Wodim Output: %s",_sb.toString()));
+    Logger.getLogger(WodimBurner.class.getName()).log(Level.INFO, String.format("Wodim Output: %s",_sb.toString())); //$NON-NLS-1$
     
     try
     {
@@ -155,13 +158,13 @@ public class WodimBurner implements IBurner
         {
           _cmdbuf.append('"');
           _cmdbuf.append(s);
-          if (s.endsWith("\\"))
+          if (s.endsWith("\\")) //$NON-NLS-1$
           {
-            _cmdbuf.append("\\");
+            _cmdbuf.append("\\"); //$NON-NLS-1$
           }
           _cmdbuf.append('"');
         }
-        else if (s.endsWith("\""))
+        else if (s.endsWith("\"")) //$NON-NLS-1$
         {
           /* The argument has already been quoted. */
           _cmdbuf.append(s);
@@ -183,20 +186,20 @@ public class WodimBurner implements IBurner
   @Override
   public String getName()
   {
-    return "Wodim";
+    return Messages.WodimBurner_6;
   }
 
   @Override
   public String getId()
   {
-    return "wodim";
+    return "wodim"; //$NON-NLS-1$
   }
 
   @Override
   public List<String> getPreFilters()
   {
     List<String> _ret  = new ArrayList<String>();
-    _ret.add("cuefile");
+    _ret.add("cuefile"); //$NON-NLS-1$
     return _ret;
   }
 
@@ -204,7 +207,7 @@ public class WodimBurner implements IBurner
   public List<String> getPostFilters()
   {
     List<String> _ret  = new ArrayList<String>();
-    _ret.add("cuefile");
+    _ret.add("cuefile"); //$NON-NLS-1$
     return _ret;
   }
 
@@ -215,17 +218,17 @@ public class WodimBurner implements IBurner
     
     try
     {
-      execWodim(Arrays.asList(new String[] { "-devices" }), new ICommandListener()
+      execWodim(Arrays.asList(new String[] { "-devices" }), new ICommandListener() //$NON-NLS-1$
       {
         @Override
         public void newLine(String theLine)
         {
-          Pattern _pat = Pattern.compile(".*dev='([^']*)'.*'([^']*)'\\s'([^']*)'");
+          Pattern _pat = Pattern.compile(".*dev='([^']*)'.*'([^']*)'\\s'([^']*)'"); //$NON-NLS-1$
           Matcher _m = _pat.matcher(theLine);
           if (_m.matches())
           {
             String _dev = _m.group(1);
-            String _name = _m.group(2) + " " + _m.group(3) + " ("+_dev+")";
+            String _name = _m.group(2) + " " + _m.group(3) + " ("+_dev+")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
             
             if (_dev.trim().length()>0)
               _devs.put(_name, _dev);
@@ -245,7 +248,7 @@ public class WodimBurner implements IBurner
   {
     try
     {
-      execWodim(Arrays.asList(new String[] { "-version" }), null);
+      execWodim(Arrays.asList(new String[] { "-version" }), null); //$NON-NLS-1$
     }
     catch (IOException _e)
     {
@@ -259,6 +262,12 @@ public class WodimBurner implements IBurner
     }
     
     return true;
+  }
+
+  @Override
+  public void setMonitor(IProgressMonitor theMonitor)
+  {
+    // TODO
   }
 
 }

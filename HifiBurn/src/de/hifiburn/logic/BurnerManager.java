@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import de.hifiburn.burner.BurnerException;
 import de.hifiburn.burner.IBurner;
 import de.hifiburn.filter.IFilter;
+import de.hifiburn.i18n.Messages;
 
 
 public class BurnerManager
@@ -42,7 +43,7 @@ public class BurnerManager
     if (theBurner!=null)
     {
       Logger.getLogger(BurnerManager.class.getName()).log(Level.INFO,
-          String.format("Initialisiere Burner %s",theBurner.getName()));
+          String.format(Messages.BurnerManager_0,theBurner.getName()));
       try
       {
         theBurner.initialize();

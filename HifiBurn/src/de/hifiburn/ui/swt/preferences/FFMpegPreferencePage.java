@@ -12,6 +12,7 @@ import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.widgets.Composite;
 
+import de.hifiburn.i18n.Messages;
 import de.hifiburn.logic.IPreferenceConstants;
 
 public class FFMpegPreferencePage extends FieldEditorPreferencePage
@@ -44,7 +45,7 @@ public class FFMpegPreferencePage extends FieldEditorPreferencePage
     @Override
     protected boolean doCheckState()
     {
-      setErrorMessage(JFaceResources.getString("DirectoryFieldEditor.errorMessage"));//$NON-NLS-1$
+      setErrorMessage("Value must be an existing directory");//$NON-NLS-1$
       
       String _dir = getTextControl().getText().trim();
       if (_dir.length() == 0 && isEmptyStringAllowed()) 
@@ -56,13 +57,13 @@ public class FFMpegPreferencePage extends FieldEditorPreferencePage
       if (!_file.isDirectory())
         return false;
       
-      String _executable = "ffmpeg";
-      if (System.getProperty("os.name").contains("win"))
-        _executable = "ffmpeg.exe";
+      String _executable = "ffmpeg"; //$NON-NLS-1$
+      if (System.getProperty("os.name").contains("win")) //$NON-NLS-1$ //$NON-NLS-2$
+        _executable = "ffmpeg.exe"; //$NON-NLS-1$
       
       if (!new File(_file,_executable).exists())
       {
-        setErrorMessage("Im angegebenen Verzeichnis konnte FFMpeg nicht gefunden werden.");
+        setErrorMessage(Messages.FFMpegPreferencePage_0);
         return false;
       }
       
@@ -86,7 +87,7 @@ public class FFMpegPreferencePage extends FieldEditorPreferencePage
   @Override
   public String getTitle()
   {
-    return "FFMpeg";
+    return Messages.FFMpegPreferencePage_1;
   }
 
 //  //Text fields for user to enter preferences
@@ -145,7 +146,7 @@ public class FFMpegPreferencePage extends FieldEditorPreferencePage
   @Override
   protected void createFieldEditors()
   {
-    DirectoryFieldEditor _dir = new FFMpegDirectoryFieldEditor(IPreferenceConstants.FFMPEG_PATH,"Pfad zu FFMpeg:",
+    DirectoryFieldEditor _dir = new FFMpegDirectoryFieldEditor(IPreferenceConstants.FFMPEG_PATH,Messages.FFMpegPreferencePage_2,
         getFieldEditorParent());
     _dir.setValidateStrategy(DirectoryFieldEditor.VALIDATE_ON_KEY_STROKE);
     addField(_dir);

@@ -8,6 +8,8 @@ package de.hifiburn.burner;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+
 import de.hifiburn.logic.InitializeException;
 import de.hifiburn.model.Disc;
 
@@ -28,5 +30,7 @@ public interface IBurner
   public Map<String, String> getDevices();
   
   public boolean canBurn();
+  
+  public void setMonitor(IProgressMonitor theMonitor);
   
 }
