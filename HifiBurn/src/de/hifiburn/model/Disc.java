@@ -19,7 +19,7 @@ public class Disc extends AbstractModelObject
   protected File tocfile = null;
   protected String catalognumber = null;
   
-  protected List<Track> tracks = new ArrayList<Track>();
+  protected List<Track> tracks = null;
  
   /**
    * 
@@ -27,6 +27,7 @@ public class Disc extends AbstractModelObject
   public Disc()
   {
     super();
+    tracks = new ArrayList<Track>();
   }
 
   /**
@@ -163,4 +164,28 @@ public class Disc extends AbstractModelObject
   {
     firePropertyChange("tocfile", tocfile, tocfile = theTocfile); //$NON-NLS-1$
   }
+
+  /**
+   * @param theTracks The tracks to set.
+   */
+  public void setTracks(List<Track> theTracks)
+  {
+    firePropertyChange("tracks",tracks,tracks = theTracks);
+    if (tracks==null)
+    {
+      List<Track> _tmp = new ArrayList<Track>();
+      setTracks(_tmp);
+    }
+  }
+  
+    
+//  public void reset()
+//  {
+//    setAlbum(null);
+//    setCatalognumber(null);
+//    setCuefile(null);
+//    setInterpret(null);
+//    setSongwriter(null);
+//    setTocfile(null);
+//  }
 }

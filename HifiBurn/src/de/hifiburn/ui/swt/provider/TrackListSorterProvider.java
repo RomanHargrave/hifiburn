@@ -30,7 +30,10 @@ public class TrackListSorterProvider extends ViewerSorter
   public int category(Object theElement)
   {
     Track _t1 = ((Track)theElement);
-    return _t1.getNo();
+    if (_t1!=null)
+      return _t1.getNo();
+    
+    return 0;
   }
 
 }

@@ -131,8 +131,6 @@ public class Messages extends NLS
 
   public static String MainWindow_3;
 
-  public static String MainWindow_30;
-
   public static String MainWindow_32;
 
   public static String MainWindow_33;

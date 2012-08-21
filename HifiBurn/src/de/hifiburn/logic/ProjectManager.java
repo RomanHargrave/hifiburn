@@ -83,7 +83,18 @@ public class ProjectManager
   
   public void newProject()
   {
-    project = new Project();
+    if (project==null)
+      project = new Project();
+    
+    try
+    {
+      project.reset();
+    }
+    catch (Exception _e)
+    {
+      System.out.println(_e.toString());
+      Logger.getLogger(ProjectManager.class.getName()).log(Level.SEVERE,_e.getMessage());
+    }
   }
   
   public void initialize(boolean useConsoleLogger) throws IOException

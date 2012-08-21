@@ -54,4 +54,14 @@ public class Project extends AbstractModelObject
   {
     firePropertyChange("disc", disc, disc= theDisc); //$NON-NLS-1$
   }
+  
+  
+//  /**
+//   * Reset object.
+//   */
+//  public void reset()
+//  {
+//    setName("");
+//    disc.reset();
+//  }
 }

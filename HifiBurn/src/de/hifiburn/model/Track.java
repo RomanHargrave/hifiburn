@@ -20,7 +20,7 @@ public class Track extends AbstractModelObject
   protected File wavfile = null;
   protected File cdtextfile = null;
   protected String isrc = null;
-  protected int pregap = 0;
+  protected Integer pregap = 0;
   
   /**
    * 
@@ -221,7 +221,7 @@ public class Track extends AbstractModelObject
   /**
    * @return Returns the pregap.
    */
-  public int getPregap()
+  public Integer getPregap()
   {
     return pregap;
   }
@@ -229,7 +229,7 @@ public class Track extends AbstractModelObject
   /**
    * @param thePregap The pregap to set.
    */
-  public void setPregap(int thePregap)
+  public void setPregap(Integer thePregap)
   {
     firePropertyChange("pregap", pregap, pregap = thePregap); //$NON-NLS-1$
   }

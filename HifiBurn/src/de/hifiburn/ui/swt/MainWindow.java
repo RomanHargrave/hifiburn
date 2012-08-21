@@ -81,7 +81,6 @@ import de.hifiburn.logic.AudioFileManager;
 import de.hifiburn.logic.BurnerManager;
 import de.hifiburn.logic.InitializeException;
 import de.hifiburn.logic.ProjectManager;
-import de.hifiburn.model.Disc;
 import de.hifiburn.model.Project;
 import de.hifiburn.model.Track;
 import de.hifiburn.ui.swt.preferences.Preferences;
@@ -110,9 +109,7 @@ public class MainWindow
 
   protected Project project = ProjectManager.getInstance().getProject();
 
-  protected Disc disc = ProjectManager.getInstance().getProject().getDisc();
-
-  protected Track track = null;
+  //protected Disc disc = ProjectManager.getInstance().getProject().getDisc();
 
   protected Shell shell;
 
@@ -144,18 +141,22 @@ public class MainWindow
    */
   public static void main(final String[] args)
   {
-    Graphics2D _g = SplashScreen.getSplashScreen().createGraphics();
+    SplashScreen _s = SplashScreen.getSplashScreen();
+    if (_s!=null)
+    {
+      Graphics2D _g = _s.createGraphics();
     
-    String _version = String.format("version %s", ProjectManager.VERSION); 
-    
-    _g.setColor(Color.BLACK);
-    _g.setFont(new Font(Font.DIALOG,Font.PLAIN, 10 ));
-    Rectangle2D _fm = _g.getFontMetrics().getStringBounds(_version, _g);
-    _g.drawString(String.format("version %s", ProjectManager.VERSION), 
-        (int)(SplashScreen.getSplashScreen().getSize().width-5-_fm.getWidth()), 
-        (int)(SplashScreen.getSplashScreen().getSize().height-5));
-    
-    SplashScreen.getSplashScreen().update();
+      String _version = String.format("version %s", ProjectManager.VERSION); 
+      
+      _g.setColor(Color.BLACK);
+      _g.setFont(new Font(Font.DIALOG,Font.PLAIN, 10 ));
+      Rectangle2D _fm = _g.getFontMetrics().getStringBounds(_version, _g);
+      _g.drawString(String.format("version %s", ProjectManager.VERSION), 
+          (int)(SplashScreen.getSplashScreen().getSize().width-5-_fm.getWidth()), 
+          (int)(SplashScreen.getSplashScreen().getSize().height-5));
+      
+      _s.update();
+    }
     
     Display display = Display.getDefault();
     Realm.runWithDefault(SWTObservables.getRealm(display), new Runnable()
@@ -176,8 +177,11 @@ public class MainWindow
           window = new MainWindow();
           ProjectManager.getInstance().postUIInitialize();
           
-          Thread.sleep(1000);
-          SplashScreen.getSplashScreen().close();
+          if (SplashScreen.getSplashScreen()!=null)
+          {
+            Thread.sleep(1000);
+            SplashScreen.getSplashScreen().close();
+          }
         }
         catch (InitializeException _e)
         {
@@ -336,7 +340,7 @@ public class MainWindow
     {
       public void drop(DropTargetEvent event)
       {
-        Track _src = disc.getTrack((String) event.data);
+        Track _src = project.getDisc().getTrack((String) event.data);
         if (_src == null || event.item == null)
           return;
 
@@ -347,12 +351,12 @@ public class MainWindow
         if (event.detail == DND.DROP_COPY)
         {
           // exchange
-          disc.exchangeTracks(_src, _dst);
+          project.getDisc().exchangeTracks(_src, _dst);
         }
         else
         {
           // move
-          disc.moveTrack(_src, _dst);
+          project.getDisc().moveTrack(_src, _dst);
         }
         
         viewerTracks.refresh();
@@ -388,7 +392,7 @@ public class MainWindow
     viewerTracks.setContentProvider(new TrackListContentProvider());
     tblclmnLaufzeit.setResizable(false);
     tblclmnLaufzeit.setWidth(75);
-    viewerTracks.setInput(disc.getTracks());
+    viewerTracks.setInput(project.getDisc().getTracks());
 
     grpTrack = new Group(compTracks, SWT.NONE);
     grpTrack.setText(Messages.MainWindow_11);
@@ -406,7 +410,7 @@ public class MainWindow
       @Override
       public void widgetSelected(SelectionEvent e) 
       {
-        for (Track _t : disc.getTracks())
+        for (Track _t : project.getDisc().getTracks())
           _t.setInterpret(txtTrackInterpret.getText());
         
         viewerTracks.refresh();
@@ -425,7 +429,7 @@ public class MainWindow
     btnTitleAll.addSelectionListener(new SelectionAdapter() {
       @Override
       public void widgetSelected(SelectionEvent e) {
-        for (Track _t : disc.getTracks())
+        for (Track _t : project.getDisc().getTracks())
           _t.setTitle(txtTrackTitle.getText());
         
         viewerTracks.refresh();
@@ -479,6 +483,13 @@ public class MainWindow
         ToolBar toolBar = new ToolBar(composite_2, SWT.FLAT | SWT.RIGHT);
         
             ToolItem tltmNewDisc = new ToolItem(toolBar, SWT.NONE);
+            tltmNewDisc.addSelectionListener(new SelectionAdapter() {
+              @Override
+              public void widgetSelected(SelectionEvent arg0) {
+                ProjectManager.getInstance().newProject();
+                viewerTracks.setInput(project.getDisc().getTracks());
+              }
+            });
             tltmNewDisc.setImage(SWTResourceManager.getImage(MainWindow.class, "/de/hifiburn/ui/icons/newdisc.png")); //$NON-NLS-1$
             tltmNewDisc.setToolTipText(Messages.MainWindow_17);
             
@@ -571,7 +582,7 @@ public class MainWindow
                               }
                               
                               // cleanup
-                              for (Track _t : disc.getTracks())
+                              for (Track _t : project.getDisc().getTracks())
                               {
                                 if (_t.getWavfile()!=null && _t.getWavfile().exists())
                                 {
@@ -655,7 +666,7 @@ public class MainWindow
       String _albuminterpret = null;
       for (File _f : _files)
       {
-        Track _t = disc.getTrack(_f.getAbsolutePath());
+        Track _t = project.getDisc().getTrack(_f.getAbsolutePath());
 
         if (_t!=null)
         {
@@ -667,34 +678,34 @@ public class MainWindow
         }
       }
 
-      if (_albumtitle != null && (disc.getAlbum() == null || !disc.getAlbum().equals(_albumtitle)))
+      if (_albumtitle != null && (project.getDisc().getAlbum() == null || !project.getDisc().getAlbum().equals(_albumtitle)))
       {
-        if (disc.getAlbum() == null || disc.getAlbum().trim().length() == 0)
+        if (project.getDisc().getAlbum() == null || project.getDisc().getAlbum().trim().length() == 0)
         {
-          disc.setAlbum(disc.getTracks().get(0).getAlbumtitle());
+          project.getDisc().setAlbum(project.getDisc().getTracks().get(0).getAlbumtitle());
         }
         else
         {
           if (MessageDialog.openConfirm(shell, Messages.MainWindow_33,
               String.format(Messages.MainWindow_34, _albumtitle)))
           {
-            disc.setAlbum(disc.getTracks().get(0).getAlbumtitle());
+            project.getDisc().setAlbum(project.getDisc().getTracks().get(0).getAlbumtitle());
           }
         }
       }
 
-      if (_albuminterpret != null && (disc.getInterpret() == null || !disc.getInterpret().equals(_albuminterpret)))
+      if (_albuminterpret != null && (project.getDisc().getInterpret() == null || !project.getDisc().getInterpret().equals(_albuminterpret)))
       {
-        if (disc.getInterpret() == null || disc.getInterpret().trim().length() == 0)
+        if (project.getDisc().getInterpret() == null || project.getDisc().getInterpret().trim().length() == 0)
         {
-          disc.setInterpret(disc.getTracks().get(0).getAlbuminterpret());
+          project.getDisc().setInterpret(project.getDisc().getTracks().get(0).getAlbuminterpret());
         }
         else
         {
           if (MessageDialog.openConfirm(shell, Messages.MainWindow_35,
               String.format(Messages.MainWindow_36, _albuminterpret)))
           {
-            disc.setInterpret(disc.getTracks().get(0).getAlbuminterpret());
+            project.getDisc().setInterpret(project.getDisc().getTracks().get(0).getAlbuminterpret());
           }
         }
       }
@@ -709,11 +720,11 @@ public class MainWindow
     DataBindingContext bindingContext = new DataBindingContext();
     //
     IObservableValue observeTextTxtDiscAlbumObserveWidget = WidgetProperties.text(SWT.Modify).observe(txtDiscAlbum);
-    IObservableValue albumDiscObserveValue = BeanProperties.value("album").observe(disc); //$NON-NLS-1$
+    IObservableValue albumDiscObserveValue = BeanProperties.value("album").observe(project.getDisc()); //$NON-NLS-1$
     bindingContext.bindValue(observeTextTxtDiscAlbumObserveWidget, albumDiscObserveValue, null, null);
     //
     IObservableValue observeTextTxtDiscInterpretObserveWidget = WidgetProperties.text(SWT.Modify).observe(txtDiscInterpret);
-    IObservableValue interpretDiscObserveValue = BeanProperties.value("interpret").observe(disc); //$NON-NLS-1$
+    IObservableValue interpretDiscObserveValue = BeanProperties.value("interpret").observe(project.getDisc()); //$NON-NLS-1$
     bindingContext.bindValue(observeTextTxtDiscInterpretObserveWidget, interpretDiscObserveValue, null, null);
     //
     IObservableValue observeSingleSelectionViewerTracks = ViewerProperties.singleSelection().observe(viewerTracks);
