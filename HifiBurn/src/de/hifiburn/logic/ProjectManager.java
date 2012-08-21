@@ -38,6 +38,8 @@ import de.hifiburn.ui.swt.TextWidgetLogHandler;
 
 public class ProjectManager
 {
+  public static final String VERSION = "0.1";
+
   private static ProjectManager instance = null;
   
   protected Project project = null;
@@ -84,7 +86,7 @@ public class ProjectManager
     project = new Project();
   }
   
-  public void initialize() throws IOException
+  public void initialize(boolean useConsoleLogger) throws IOException
   {
     // init logging
     Logger _log = Logger.getLogger(""); //$NON-NLS-1$
@@ -92,7 +94,8 @@ public class ProjectManager
       _log.removeHandler(_h);
     
     _log.setLevel(Level.INFO);
-    _log.addHandler(new ConsoleHandler());
+    if (useConsoleLogger)
+      _log.addHandler(new ConsoleHandler());
     logfile = File.createTempFile("hifiburn", ".log"); //$NON-NLS-1$ //$NON-NLS-2$
     FileHandler _fh = new FileHandler(logfile.getAbsolutePath(), 100000, 1, true);
     _fh.setFormatter(new SimpleFormatter());

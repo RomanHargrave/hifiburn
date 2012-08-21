@@ -5,6 +5,11 @@
  */
 package de.hifiburn.ui.swt;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.SplashScreen;
+import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -45,7 +50,6 @@ import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
@@ -138,8 +142,21 @@ public class MainWindow
    * 
    * @param args
    */
-  public static void main(String[] args)
+  public static void main(final String[] args)
   {
+    Graphics2D _g = SplashScreen.getSplashScreen().createGraphics();
+    
+    String _version = String.format("version %s", ProjectManager.VERSION); 
+    
+    _g.setColor(Color.BLACK);
+    _g.setFont(new Font(Font.DIALOG,Font.PLAIN, 10 ));
+    Rectangle2D _fm = _g.getFontMetrics().getStringBounds(_version, _g);
+    _g.drawString(String.format("version %s", ProjectManager.VERSION), 
+        (int)(SplashScreen.getSplashScreen().getSize().width-5-_fm.getWidth()), 
+        (int)(SplashScreen.getSplashScreen().getSize().height-5));
+    
+    SplashScreen.getSplashScreen().update();
+    
     Display display = Display.getDefault();
     Realm.runWithDefault(SWTObservables.getRealm(display), new Runnable()
     {
@@ -148,9 +165,19 @@ public class MainWindow
         MainWindow window = null;
         try
         {
-          ProjectManager.getInstance().initialize();
+          boolean _console = false;
+          for (String arg : args)
+          {
+            if (arg.contains("console"))
+              _console = true;
+          }
+          
+          ProjectManager.getInstance().initialize(_console);
           window = new MainWindow();
           ProjectManager.getInstance().postUIInitialize();
+          
+          Thread.sleep(1000);
+          SplashScreen.getSplashScreen().close();
         }
         catch (InitializeException _e)
         {
@@ -437,7 +464,7 @@ public class MainWindow
     txtLog = new Text(composite_1, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL);
     txtLog.setBackground(SWTResourceManager.getColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND));
     txtLog.setEditable(false);
-    Font terminalFont = JFaceResources.getFont(JFaceResources.TEXT_FONT);
+    org.eclipse.swt.graphics.Font terminalFont = JFaceResources.getFont(JFaceResources.TEXT_FONT);
     txtLog.setFont(terminalFont);
     
     m_bindingContext = initDataBindings();

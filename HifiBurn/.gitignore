@@ -1,2 +1,6 @@
 *.class
 bin
+hifiburn*.jar
+hifiburn.jar
+hifiburn.properties
+
