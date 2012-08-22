@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
@@ -22,7 +23,7 @@ import de.hifiburn.logic.ConvertManager;
 
 public class Preferences
 {
-  public static void showPreferenceDialog(Shell theShell)
+  public static boolean showPreferenceDialog(Shell theShell)
   {
     PreferenceDialog _dlg = buildPreferencesDialog(theShell);
     
@@ -40,17 +41,24 @@ public class Preferences
     _dlg.setPreferenceStore(_ps);
     
     // open
-    _dlg.open();
-    
-    // store
-    try
+    if (_dlg.open()==Dialog.OK)
     {
-      // Save the preferences
-      _ps.save();
+      // store
+      try
+      {
+        // Save the preferences
+        _ps.save();
+      }
+      catch(IOException _e)
+      {
+        Logger.getLogger(PreferenceManager.class.getName()).log(Level.SEVERE, _e.getMessage());
+      }
+      
+      return true;
     }
-    catch(IOException _e)
+    else
     {
-      Logger.getLogger(PreferenceManager.class.getName()).log(Level.SEVERE, _e.getMessage());
+      return false;
     }
   }
   

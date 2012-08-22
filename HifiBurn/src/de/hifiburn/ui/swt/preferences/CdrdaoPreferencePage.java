@@ -21,7 +21,6 @@ import de.hifiburn.logic.IPreferenceConstants;
 
 public class CdrdaoPreferencePage extends FieldEditorPreferencePage
 {
-
   protected class CdrdaoDirectoryFieldEditor extends DirectoryFieldEditor
   {
 
@@ -116,6 +115,13 @@ public class CdrdaoPreferencePage extends FieldEditorPreferencePage
     // simulation
     BooleanFieldEditor _bo = new BooleanFieldEditor(IPreferenceConstants.CDRDAO_SIMULATION, "Do not burn, just Simulate!", getFieldEditorParent());
     addField(_bo);
+    
+    if (_devs.length==0)
+    {
+      _dev.setEnabled(false, getFieldEditorParent());
+      _speed.setEnabled(false, getFieldEditorParent());
+      _bo.setEnabled(false, getFieldEditorParent());
+    }
   }
 
   private String[][] getDevices()

@@ -175,21 +175,32 @@ public class MainWindow
               _console = true;
           }
           
-          ProjectManager.getInstance().initialize(_console);
-          window = new MainWindow();
-          ProjectManager.getInstance().postUIInitialize();
-          
           if (SplashScreen.getSplashScreen()!=null)
           {
             Thread.sleep(1000);
             SplashScreen.getSplashScreen().close();
           }
-        }
-        catch (InitializeException _e)
-        {
-          MessageDialog.openError(null, Messages.MainWindow_0, _e.getMessage());
-          Preferences.showPreferenceDialog(window.shell);
-        }
+          
+          boolean _configOk = false;
+          while (_configOk == false)
+          {
+            try
+            {
+              ProjectManager.getInstance().initialize(_console);
+              window = new MainWindow();
+              ProjectManager.getInstance().postUIInitialize();
+              _configOk = true;
+            } 
+            catch (InitializeException _e)
+            {
+              MessageDialog.openError(null, Messages.MainWindow_0, _e.getMessage());
+              if (Preferences.showPreferenceDialog(window.shell)==false)
+              {
+                System.exit(0);
+              }
+            }
+          }
+        }  
         catch (IOException e)
         {
           MessageDialog.openError(null, Messages.MainWindow_1, e.getMessage());
@@ -200,6 +211,8 @@ public class MainWindow
           e.printStackTrace();
           System.exit(1);
         }
+        if (SplashScreen.getSplashScreen()!=null)
+          SplashScreen.getSplashScreen().close();
         
         if (window!=null)
           window.open();
@@ -489,7 +502,7 @@ public class MainWindow
     composite_1.setLayout(fl_composite_1);
     
     txtLog = new Text(composite_1, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL);
-    txtLog.setBackground(SWTResourceManager.getColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND));
+    txtLog.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
     txtLog.setEditable(false);
     org.eclipse.swt.graphics.Font terminalFont = JFaceResources.getFont(JFaceResources.TEXT_FONT);
     txtLog.setFont(terminalFont);

@@ -232,7 +232,7 @@ public class SWTResourceManager {
 	 */
 	public static Image decorateImage(final Image baseImage, final Image decorator, final int corner) {
 		if (corner <= 0 || corner >= LAST_CORNER_KEY) {
-			throw new IllegalArgumentException("Wrong decorate corner"); //$NON-NLS-1$
+			throw new IllegalArgumentException("Wrong decorate corner");
 		}
 		Map<Image, Map<Image, Image>> cornerDecoratedImageMap = m_decoratedImageMap[corner];
 		if (cornerDecoratedImageMap == null) {

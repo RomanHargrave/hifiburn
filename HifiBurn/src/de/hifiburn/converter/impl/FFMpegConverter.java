@@ -103,8 +103,9 @@ public class FFMpegConverter implements IConverter
     _args.add("-sample_fmt"); //$NON-NLS-1$
     _args.add("s"+String.valueOf(theSamplerate)); //$NON-NLS-1$
 
-    _args.add("-filter"); //$NON-NLS-1$
-    _args.add("aresample=" + theBitrate); //$NON-NLS-1$
+    // !!! dont work under windows
+    //_args.add("-filter"); //$NON-NLS-1$
+    //_args.add("aresample=" + theBitrate); //$NON-NLS-1$
 
     _args.add(theOutput.getAbsolutePath());
 

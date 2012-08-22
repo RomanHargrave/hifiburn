@@ -17,7 +17,6 @@ public class LogFormatter extends SimpleFormatter
     String _ret = super.format(theRecord);
     if (System.getProperty("os.name").toLowerCase().indexOf("win")>=0)
     {
-      System.out.println("REPLACE");
       return _ret.replace("\r\n", "\n").replace("\n", "\r\n");
     }
     

@@ -6,7 +6,12 @@
 package de.hifiburn.burner.impl;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,19 +46,23 @@ public class CdrdaoBurner implements IBurner
   private Pattern progressDoneMatcher = Pattern.compile("Wrote\\s([\\d]*)[^\\d]*([\\d]*)%[^\\d]*([\\d]*).*"); //$NON-NLS-1$
   private Pattern trackMatcher = Pattern.compile("Writing[^\\d]*([\\d]*).*"); //$NON-NLS-1$
   private Pattern versionMathcer = Pattern.compile("Cdrdao\\sversion\\s([^\\.]*)\\.([^\\.])*\\.([^\\s]*).*"); //$NON-NLS-1$
-
+  private Pattern drivesMatcher = Pattern.compile("([A-Z]):\\\\*"); //$NON-NLS-1$
+  private Pattern speedMatcher = Pattern.compile("Maximum writing speed: ([\\d]*) kB/s"); //$NON-NLS-1$
+  private Pattern busMatcher = Pattern.compile("([^\\s]*)\\s+:\\s+(.*)"); //$NON-NLS-1$
+  
+  
   private IProgressMonitor monitor = null;
   
   public boolean passVersion = false; 
+  
+  protected Integer maxSpeed = null; 
   
   @Override
   public void initialize() throws BurnerException, InitializeException
   {
     try
     {
-      ICommandListener _l = null;
-      
-      execCdrdao(Arrays.asList(new String[] { "scanbus" }),_l = new ICommandListener() //$NON-NLS-1$
+      execCdrdao(Arrays.asList(new String[] { "scanbus" }), new ICommandListener() //$NON-NLS-1$
       {
         
         @Override
@@ -96,6 +105,39 @@ public class CdrdaoBurner implements IBurner
   public void burn(Disc theDisc)  throws BurnerException
   {
     List<String> _args = new ArrayList<String>();
+    
+    try
+    {
+      // for windows and cygwin we need to change the paths at the toc file for cdrdao
+      if (System.getProperty("os.name").toLowerCase().indexOf("win")>=0)
+      {
+        BufferedReader _br = new BufferedReader(new FileReader(theDisc.getTocfile()));
+        StringBuilder _sb = new StringBuilder();
+        String _line;
+        while ((_line = _br.readLine()) != null)   
+        {
+          _sb.append(_line);
+        }
+        _br.close();
+        
+        String _out = _sb.toString();
+        Matcher _m = drivesMatcher.matcher(_out);
+        String _replaced = _m.replaceAll("/cygdrive/$1/");
+        
+        BufferedWriter _bw = new BufferedWriter(new FileWriter(theDisc.getTocfile()));
+        _bw.write(_replaced);
+        _bw.flush();
+        _bw.close();
+      }
+    }
+    catch (FileNotFoundException _e1)
+    {
+      throw new BurnerException(_e1);
+    }
+    catch (IOException _e1)
+    {
+      throw new BurnerException(_e1);
+    }
     
     final StringBuilder _errors = new StringBuilder();
     
@@ -322,8 +364,7 @@ public class CdrdaoBurner implements IBurner
         @Override
         public void newLine(String theLine)
         {
-          Pattern _pat = Pattern.compile("([^\\s]*)\\s+:\\s+(.*)"); //$NON-NLS-1$
-          Matcher _m = _pat.matcher(theLine);
+          Matcher _m = busMatcher.matcher(theLine);
           if (_m.matches())
           {
             String _dev = _m.group(1);
@@ -332,8 +373,8 @@ public class CdrdaoBurner implements IBurner
             if (_dev.trim().length()>0)
             {
               // check if its a writer
-              
-              _devs.put(_name, _dev);
+              if (getMaxSpeed(_dev)!=null && getMaxSpeed(_dev)>0)
+                _devs.put(_name, _dev);
             }
           }
         }
@@ -379,6 +420,38 @@ public class CdrdaoBurner implements IBurner
     Map<String,String> _ret = new HashMap<String,String>();
     _ret.put(Messages.CdrdaoBurner_12, ""); //$NON-NLS-2$
     return _ret;
+  }
+  
+  protected Integer getMaxSpeed(String theDev)
+  {
+    if (maxSpeed==null)
+    {
+      try
+      {
+        execCdrdao(Arrays.asList(new String[] { "drive-info" }), new ICommandListener() //$NON-NLS-1$
+        {
+          @Override
+          public void newLine(String theLine)
+          {
+            Matcher _m = speedMatcher.matcher(theLine);
+            if (_m.matches() && _m.groupCount()>0)
+            {
+              String _speed = _m.group(1);
+              
+              if (_speed.trim().length()>0)
+              {
+                maxSpeed = Integer.parseInt(_speed);
+              }
+            }
+          }
+        });
+      }
+      catch (IOException _e)
+      {
+      }
+    }
+    
+    return maxSpeed;
   }
 
 }

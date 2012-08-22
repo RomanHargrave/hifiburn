@@ -85,13 +85,13 @@ public class TocFileFilter implements IFilter
     theWriter.write(String.format(" LANGUAGE 0 {\n")); //$NON-NLS-1$
     
     if (isSet(theProject.getDisc().getInterpret()))
-      theWriter.write(String.format("    PERFORMER \"%s\"\n",theProject.getDisc().getInterpret())); //$NON-NLS-1$
+      theWriter.write(String.format("    PERFORMER \"%s\"\n",sanitize(theProject.getDisc().getInterpret()))); //$NON-NLS-1$
     
     if (isSet(theProject.getDisc().getSongwriter()))
-      theWriter.write(String.format("    SONGWRITER \"%s\"\n",theProject.getDisc().getSongwriter())); //$NON-NLS-1$
+      theWriter.write(String.format("    SONGWRITER \"%s\"\n",sanitize(theProject.getDisc().getSongwriter()))); //$NON-NLS-1$
     
     if (isSet(theProject.getDisc().getAlbum()))
-      theWriter.write(String.format("    TITLE \"%s\"\n",theProject.getDisc().getAlbum())); //$NON-NLS-1$
+      theWriter.write(String.format("    TITLE \"%s\"\n",sanitize(theProject.getDisc().getAlbum()))); //$NON-NLS-1$
     
     theWriter.write(String.format("  }\n")); //$NON-NLS-1$
     theWriter.write(String.format("}\n")); //$NON-NLS-1$
@@ -110,13 +110,13 @@ public class TocFileFilter implements IFilter
       
       theWriter.write(String.format("   LANGUAGE 0 {\n")); //$NON-NLS-1$
       if (isSet(_track.getTitle()))
-        theWriter.write(String.format("      TITLE \"%s\"\n",_track.getTitle())); //$NON-NLS-1$
+        theWriter.write(String.format("      TITLE \"%s\"\n",sanitize(_track.getTitle()))); //$NON-NLS-1$
         
       if (isSet(_track.getInterpret()))
-        theWriter.write(String.format("      PERFORMER \"%s\"\n",_track.getInterpret())); //$NON-NLS-1$
+        theWriter.write(String.format("      PERFORMER \"%s\"\n",sanitize(_track.getInterpret()))); //$NON-NLS-1$
       
       if (isSet(_track.getSongwriter()))
-        theWriter.write(String.format("      SONGWRITER \"%s\"\n",_track.getSongwriter())); //$NON-NLS-1$
+        theWriter.write(String.format("      SONGWRITER \"%s\"\n",sanitize(_track.getSongwriter()))); //$NON-NLS-1$
       
       theWriter.write(String.format("    }\n")); //$NON-NLS-1$
       theWriter.write(String.format("  }\n")); //$NON-NLS-1$
@@ -152,6 +152,10 @@ public class TocFileFilter implements IFilter
     return false;
   }
 
+  protected String sanitize(final String theInput)
+  {
+    return theInput.replace("\"", "\\\"");
+  }
 }
 
 

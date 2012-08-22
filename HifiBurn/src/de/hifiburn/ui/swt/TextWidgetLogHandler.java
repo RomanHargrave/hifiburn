@@ -58,8 +58,6 @@ public class TextWidgetLogHandler extends StreamHandler
     else
     {
       _buf.append(_msg);
-//      if (System.getProperty("os.name").contains("win"))
-//        _buf.append("\)
     }
   }
 
