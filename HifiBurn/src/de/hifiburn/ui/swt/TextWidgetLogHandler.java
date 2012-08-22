@@ -42,8 +42,7 @@ public class TextWidgetLogHandler extends StreamHandler
   public void publish(LogRecord theRecord)
   {
     final String _msg = getFormatter().format(theRecord);
-    
-    
+
     if (widget!=null)
     {
       Display.getDefault().asyncExec(new Runnable()
@@ -59,6 +58,8 @@ public class TextWidgetLogHandler extends StreamHandler
     else
     {
       _buf.append(_msg);
+//      if (System.getProperty("os.name").contains("win"))
+//        _buf.append("\)
     }
   }
 

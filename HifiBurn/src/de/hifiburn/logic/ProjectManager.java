@@ -13,7 +13,6 @@ import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -104,13 +103,19 @@ public class ProjectManager
     
     _log.setLevel(Level.INFO);
     if (useConsoleLogger)
-      _log.addHandler(new ConsoleHandler());
+    {
+      Handler _h = new ConsoleHandler();
+      _h.setFormatter(new LogFormatter());
+      _log.addHandler(_h);
+    }
     logfile = File.createTempFile("hifiburn", ".log"); //$NON-NLS-1$ //$NON-NLS-2$
     FileHandler _fh = new FileHandler(logfile.getAbsolutePath(), 100000, 1, true);
-    _fh.setFormatter(new SimpleFormatter());
+    _fh.setFormatter(new LogFormatter());
     _log.addHandler(_fh);
     logwidget = new TextWidgetLogHandler();
+    logwidget.setFormatter(new LogFormatter());
     _log.addHandler(logwidget);
+    
     
     // init Preferences
     PreferenceManager.getInstance();
