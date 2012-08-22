@@ -50,6 +50,7 @@ public class FFMpegConverter implements IConverter
     supportedExtension.put("ape", "ape");
     supportedExtension.put("eac3", "ac3");
     supportedExtension.put("ac3", "ac3");
+    supportedExtension.put("flac", "flac");
     supportedExtension.put("mp3", "mp3");
     supportedExtension.put("mp3float", "mp3");
     supportedExtension.put("MP2 (MPEG audio layer 2)", "mp2");
