@@ -26,7 +26,6 @@ import de.hifiburn.converter.ConvertException;
 import de.hifiburn.converter.Format;
 import de.hifiburn.converter.IConverter;
 import de.hifiburn.converter.impl.FFMpegConverter;
-import de.hifiburn.converter.impl.JLibAVConverter;
 import de.hifiburn.filter.FilterException;
 import de.hifiburn.filter.IFilter;
 import de.hifiburn.filter.impl.CueFileFilter;
@@ -122,7 +121,8 @@ public class ProjectManager
   {
     // register converter
     ConvertManager.getInstance().registerConverter(new FFMpegConverter());
-    ConvertManager.getInstance().registerConverter(new JLibAVConverter());
+    // seems not to work until now
+    //ConvertManager.getInstance().registerConverter(new JLibAVConverter());
       
     // register filter
     FilterManager.getInstance().registerFilter(new CueFileFilter());

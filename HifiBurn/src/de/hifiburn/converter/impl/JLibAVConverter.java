@@ -55,7 +55,7 @@ public class JLibAVConverter implements IConverter
     try
     {
       _md = new DefaultMediaDecoder(_srcUrl); // open input file/stream
-      _me = new DefaultMediaEncoder(_dstUrl, "wav"); // open output file  //$NON-NLS-1$
+      _me = new DefaultMediaEncoder(_dstUrl, null); // open output file  //$NON-NLS-1$
       _mr = _md.getMediaReader();
       _mw = _me.getMediaWriter();
 
@@ -173,9 +173,9 @@ public class JLibAVConverter implements IConverter
   @Override
   public boolean canConvert()
   {
-    if (LibraryManager.getInstance().getAVCodecLibraryWrapper() == null
-        || LibraryManager.getInstance().getAVFormatLibraryWrapper() == null
-        || LibraryManager.getInstance().getAVUtilLibraryWrapper() == null)
+    if (LibraryManager.getInstance().getAVCodecLibrary() == null
+        || LibraryManager.getInstance().getAVFormatLibrary() == null
+        || LibraryManager.getInstance().getAVUtilLibrary() == null)
       return false;
     
     return true;

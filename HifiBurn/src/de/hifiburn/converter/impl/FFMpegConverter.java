@@ -10,15 +10,22 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import de.hifiburn.converter.ConvertException;
 import de.hifiburn.converter.Format;
 import de.hifiburn.converter.IConverter;
 import de.hifiburn.i18n.Messages;
+import de.hifiburn.logic.ICommandListener;
 import de.hifiburn.logic.IPreferenceConstants;
 import de.hifiburn.logic.InitializeException;
 import de.hifiburn.logic.PreferenceManager;
@@ -26,6 +33,40 @@ import de.hifiburn.logic.PreferenceManager;
 public class FFMpegConverter implements IConverter
 {
 
+  protected Pattern patternExtension = Pattern.compile("\\sD.A...\\s([^\\s]*).*");
+  
+  protected Map<String,String> supportedExtension = new HashMap<String,String>();
+  
+  protected List<String> detectedExtensions = null;
+  
+
+  /**
+   * 
+   */
+  public FFMpegConverter()
+  {
+    super();
+    supportedExtension.put("aac", "aac");
+    supportedExtension.put("ape", "ape");
+    supportedExtension.put("eac3", "ac3");
+    supportedExtension.put("ac3", "ac3");
+    supportedExtension.put("mp3", "mp3");
+    supportedExtension.put("mp3float", "mp3");
+    supportedExtension.put("MP2 (MPEG audio layer 2)", "mp2");
+    supportedExtension.put("MP2 (MPEG audio layer 2)", "mp2");
+    supportedExtension.put("pcm_s16le", "wav");
+    supportedExtension.put("tta", "tta");
+    supportedExtension.put("twinvq", "tfq");
+    supportedExtension.put("twinvq", "tfq");
+    supportedExtension.put("vorbis", "ogg");
+    supportedExtension.put("wavpack", "wv");
+    supportedExtension.put("wmalossless", "wma");
+    supportedExtension.put("wmapro", "wma");
+    supportedExtension.put("wmav1", "wma");
+    supportedExtension.put("wmavoice", "wma");
+  }
+
+  
   @Override
   public void initialize()
       throws ConvertException, InitializeException
@@ -33,6 +74,8 @@ public class FFMpegConverter implements IConverter
     if (canConvert()==false)
       throw new InitializeException(
           Messages.FFMpegConverter_0);
+    
+    detectedExtensions = getExtensionInternally();
   }
 
   @Override
@@ -66,7 +109,7 @@ public class FFMpegConverter implements IConverter
 
     try
     {
-      int _ret = execFFmpeg(_args);
+      int _ret = execFFmpeg(_args, null);
       if (_ret != 0)
       {
         Logger.getLogger(FFMpegConverter.class.getName()).log(Level.SEVERE, Messages.FFMpegConverter_1,
@@ -84,10 +127,14 @@ public class FFMpegConverter implements IConverter
   @Override
   public boolean supportFormat(File theInput, Format theOutputFormat)
   {
-    return true;
+    String _extension = theInput.getName().substring(theInput.getName().lastIndexOf(".")+1);
+    if (detectedExtensions.contains(_extension))
+      return true;
+    
+    return false;
   }
 
-  protected int execFFmpeg(List<String> theArguments)
+  protected int execFFmpeg(List<String> theArguments, ICommandListener theListener)
       throws IOException
   {
     List<String> _tmp = new ArrayList<String>();
@@ -115,6 +162,8 @@ public class FFMpegConverter implements IConverter
       _sb.append(_out);
       _sb.append("\n"); //$NON-NLS-1$
       
+      if (theListener!=null)
+        theListener.newLine(_out);
     }
     _s.close();
 
@@ -187,14 +236,39 @@ public class FFMpegConverter implements IConverter
   @Override
   public List<String> getExtension()
   {
-    List<String> _ret = new ArrayList<String>();
-    _ret.add("*.mp3");  //$NON-NLS-1$
-    _ret.add("*.wav");  //$NON-NLS-1$
-    _ret.add("*.flac");  //$NON-NLS-1$
-    _ret.add("*.ape");  //$NON-NLS-1$
-    _ret.add("*.aac"); //$NON-NLS-1$
+    return detectedExtensions;
+  }
+
+
+  /**
+   * @return
+   */
+  protected List<String> getExtensionInternally()
+  {
+    final Set<String> _ret = new HashSet<String>();
     
-    return _ret;
+    try
+    {
+      execFFmpeg(Arrays.asList(new String[] { "-codecs" }), new ICommandListener()
+      {
+        @Override
+        public void newLine(String theLine)
+        {
+          Matcher _m = patternExtension.matcher(theLine);
+          if (_m.matches())
+          {
+            if (supportedExtension.containsKey(_m.group(1)))
+              _ret.add(supportedExtension.get(_m.group(1)));
+          }
+        }
+      });
+    }
+    catch (IOException _e)
+    {
+      Logger.getLogger(FFMpegConverter.class.getName()).log(Level.INFO, String.format("Could not detect codec support (%s)", //$NON-NLS-1$
+          _e.toString()));
+    }
+    return new ArrayList<String>(_ret);
   }
 
   @Override
@@ -202,7 +276,7 @@ public class FFMpegConverter implements IConverter
   {
     try
     {
-      execFFmpeg(Arrays.asList(new String[] { "-version" }));  //$NON-NLS-1$
+      execFFmpeg(Arrays.asList(new String[] { "-version" }), null);  //$NON-NLS-1$
     }
     catch (IOException _e)
     {
@@ -212,3 +286,4 @@ public class FFMpegConverter implements IConverter
     return true;
   }
 }
+

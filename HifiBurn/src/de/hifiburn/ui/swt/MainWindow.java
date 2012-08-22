@@ -654,15 +654,28 @@ public class MainWindow
     _fd.setText(Messages.MainWindow_29);
     _fd.setFilterPath(System.getProperty("user.home")); //$NON-NLS-1$
     List<String> _exts = new ArrayList<String>(AudioFileManager.getInstance().getExtensions());
+    
+    List<String> _fullexts = new ArrayList<String>();
     StringBuilder _sb = new StringBuilder();
     for (String _s : _exts)
     {
+      if (!_s.startsWith("*."))  //$NON-NLS-1$
+        _sb.append("*.");  //$NON-NLS-1$
       _sb.append(_s);
       _sb.append(";"); //$NON-NLS-1$
     }
-    _exts.add(0,_sb.toString());
+    _fullexts.add(0,_sb.toString());
     
-    _fd.setFilterExtensions(_exts.toArray(new String[0]));
+    for (String _ext : _exts)
+    {
+      if (!_ext.startsWith("*."))  //$NON-NLS-1$
+        _ext = "*."+_ext;
+      
+      _fullexts.add(_ext);
+    }
+    
+    _fd.setFilterExtensions(_fullexts.toArray(new String[0]));
+    
     String _fn = _fd.open();
     if (_fn != null)
     {
