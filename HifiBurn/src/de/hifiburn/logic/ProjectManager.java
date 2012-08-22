@@ -38,7 +38,7 @@ import de.hifiburn.ui.swt.TextWidgetLogHandler;
 
 public class ProjectManager
 {
-  public static final String VERSION = "0.1";
+  public static final String VERSION = "0.1"; //$NON-NLS-1$
 
   private static ProjectManager instance = null;
   

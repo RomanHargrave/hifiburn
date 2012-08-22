@@ -48,7 +48,7 @@ public class AbstractModelObject
   {
     for (Field _f : this.getClass().getDeclaredFields())
     {
-      System.out.println("Reset field "+_f.getName()+" of object"+this.getClass().getName());
+      System.out.println("Reset field "+_f.getName()+" of object"+this.getClass().getName()); //$NON-NLS-1$ //$NON-NLS-2$
       Object _obj = _f.get(this);
       
       if (_obj instanceof AbstractModelObject)
@@ -74,7 +74,7 @@ public class AbstractModelObject
       
       for (Method _m : this.getClass().getMethods())
       {
-        if (_m.getName().startsWith("set") && _m.getName().endsWith(_name))
+        if (_m.getName().startsWith("set") && _m.getName().endsWith(_name)) //$NON-NLS-1$
         {
           _m.invoke(this, new Object[]{null});
           break;

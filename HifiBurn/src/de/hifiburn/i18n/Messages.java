@@ -236,6 +236,8 @@ public class Messages extends NLS
   public static String WodimPreferencePage_2;
 
   public static String WodimPreferencePage_3;
+  public static String MainWindow_mntmRemoveTrack_text;
+  public static String MainWindow_tltmAddTracks_text;
   static
   {
     // initialize resource bundle

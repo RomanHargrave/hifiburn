@@ -67,40 +67,6 @@ public class Disc extends AbstractModelObject
     return tracks;
   }
   
-  public Track getTrack(String theFilename)
-  {
-    for (Track _t : tracks)
-      if (_t.getFile().getAbsoluteFile().toString().equals(theFilename))
-        return _t;
-    
-    return null;
-  }
-  
-  public void exchangeTracks(Track theSource, Track theTarget)
-  {
-    Collections.swap(tracks,theSource.getNo()-1, theTarget.getNo()-1);
-    
-    for (int _i=0; _i<tracks.size(); _i++)
-      tracks.get(_i).setNo(_i+1);
-  }
-  
-  public void moveTrack(Track theSource, Track theTarget)
-  {
-    tracks.remove(theSource.getNo()-1);
-    tracks.add(theTarget.getNo()-1, theSource);
-    
-    for (int _i=0; _i<tracks.size(); _i++)
-      tracks.get(_i).setNo(_i+1);
-  }
-  
-  public void addTrack(Track theTrack)
-  {
-    tracks.add(theTrack);
-    
-    for (int _i=0; _i<tracks.size(); _i++)
-      tracks.get(_i).setNo(_i+1);
-  }
-  
   /**
    * @return Returns the cuefile.
    */
@@ -170,12 +136,54 @@ public class Disc extends AbstractModelObject
    */
   public void setTracks(List<Track> theTracks)
   {
-    firePropertyChange("tracks",tracks,tracks = theTracks);
+    firePropertyChange("tracks",tracks,tracks = theTracks); //$NON-NLS-1$
     if (tracks==null)
     {
       List<Track> _tmp = new ArrayList<Track>();
       setTracks(_tmp);
     }
+  }
+  
+  public Track getTrack(String theFilename)
+  {
+    for (Track _t : tracks)
+      if (_t.getFile().getAbsoluteFile().toString().equals(theFilename))
+        return _t;
+    
+    return null;
+  }
+  
+  public void exchangeTracks(Track theSource, Track theTarget)
+  {
+    Collections.swap(tracks,theSource.getNo()-1, theTarget.getNo()-1);
+    
+    for (int _i=0; _i<tracks.size(); _i++)
+      tracks.get(_i).setNo(_i+1);
+  }
+  
+  public void moveTrack(Track theSource, Track theTarget)
+  {
+    tracks.remove(theSource.getNo()-1);
+    tracks.add(theTarget.getNo()-1, theSource);
+    
+    for (int _i=0; _i<tracks.size(); _i++)
+      tracks.get(_i).setNo(_i+1);
+  }
+  
+  public void addTrack(Track theTrack)
+  {
+    tracks.add(theTrack);
+    
+    for (int _i=0; _i<tracks.size(); _i++)
+      tracks.get(_i).setNo(_i+1);
+  }
+  
+  public void removeTrack(Track theTrack)
+  {
+    tracks.remove(theTrack.getNo()-1);
+    
+    for (int _i=0; _i<tracks.size(); _i++)
+      tracks.get(_i).setNo(_i+1);
   }
   
     

@@ -61,6 +61,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
@@ -146,12 +148,12 @@ public class MainWindow
     {
       Graphics2D _g = _s.createGraphics();
     
-      String _version = String.format("version %s", ProjectManager.VERSION); 
+      String _version = String.format("version %s", ProjectManager.VERSION);  //$NON-NLS-1$
       
       _g.setColor(Color.BLACK);
       _g.setFont(new Font(Font.DIALOG,Font.PLAIN, 10 ));
       Rectangle2D _fm = _g.getFontMetrics().getStringBounds(_version, _g);
-      _g.drawString(String.format("version %s", ProjectManager.VERSION), 
+      _g.drawString(String.format("version %s", ProjectManager.VERSION),  //$NON-NLS-1$
           (int)(SplashScreen.getSplashScreen().getSize().width-5-_fm.getWidth()), 
           (int)(SplashScreen.getSplashScreen().getSize().height-5));
       
@@ -169,7 +171,7 @@ public class MainWindow
           boolean _console = false;
           for (String arg : args)
           {
-            if (arg.contains("console"))
+            if (arg.contains("console")) //$NON-NLS-1$
               _console = true;
           }
           
@@ -392,6 +394,27 @@ public class MainWindow
     viewerTracks.setContentProvider(new TrackListContentProvider());
     tblclmnLaufzeit.setResizable(false);
     tblclmnLaufzeit.setWidth(75);
+    
+    Menu menu = new Menu(tableTracks);
+    tableTracks.setMenu(menu);
+    
+    MenuItem mntmRemoveTrack = new MenuItem(menu, SWT.NONE);
+    mntmRemoveTrack.addSelectionListener(new SelectionAdapter() {
+      @Override
+      public void widgetSelected(SelectionEvent arg0) {
+        if (tableTracks.getSelection().length>0 && tableTracks.getSelection()[0].getData()!=null)
+        {
+          Track _t = ((Track)tableTracks.getSelection()[0].getData());
+          project.getDisc().removeTrack(_t);
+          viewerTracks.refresh();
+          
+          if (tableTracks.getSelectionCount()==0)
+            SwtTools.setEnabledRecursive(grpTrack, false);
+        }
+      }
+    });
+    mntmRemoveTrack.setImage(SWTResourceManager.getImage(MainWindow.class, "/de/hifiburn/ui/icons/delete.png")); //$NON-NLS-1$
+    mntmRemoveTrack.setText(Messages.MainWindow_mntmRemoveTrack_text);
     viewerTracks.setInput(project.getDisc().getTracks());
 
     grpTrack = new Group(compTracks, SWT.NONE);
@@ -496,6 +519,7 @@ public class MainWindow
                 ToolItem toolItem = new ToolItem(toolBar, SWT.SEPARATOR);
                 
                     ToolItem tltmAddTracks = new ToolItem(toolBar, SWT.NONE);
+                    tltmAddTracks.setText(Messages.MainWindow_tltmAddTracks_text);
                     tltmAddTracks.addSelectionListener(new SelectionAdapter()
                     {
                       @Override
