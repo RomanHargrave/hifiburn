@@ -27,6 +27,10 @@ public class Messages extends NLS
 
   public static String CdrdaoBurner_1;
 
+  public static String CdrdaoBurner_11;
+
+  public static String CdrdaoBurner_12;
+
   public static String CdrdaoBurner_2;
 
   public static String CdrdaoBurner_3;
@@ -179,6 +183,8 @@ public class Messages extends NLS
 
   public static String ProjectManager_11;
 
+  public static String ProjectManager_12;
+
   public static String ProjectManager_13;
 
   public static String ProjectManager_14;
@@ -198,6 +204,10 @@ public class Messages extends NLS
   public static String ProjectManager_20;
 
   public static String ProjectManager_21;
+
+  public static String ProjectManager_22;
+
+  public static String ProjectManager_23;
 
   public static String ProjectManager_3;
 

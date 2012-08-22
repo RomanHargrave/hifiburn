@@ -91,7 +91,6 @@ public class ProjectManager
     }
     catch (Exception _e)
     {
-      System.out.println(_e.toString());
       Logger.getLogger(ProjectManager.class.getName()).log(Level.SEVERE,_e.getMessage());
     }
   }
@@ -131,6 +130,17 @@ public class ProjectManager
     // register burner
     //BurnerManager.getInstance().registerBurner(new WodimBurner());
     BurnerManager.getInstance().registerBurner(new CdrdaoBurner());
+    
+    // check if current burner (set in preferences) can be fetched
+    if (BurnerManager.getInstance().getBurner()==null)
+      throw new InitializeException(Messages.ProjectManager_12);
+    
+    // check if current audioconverter (set in preferences) can be fetched
+    if (ConvertManager.getInstance().getConverter().size()==0)
+      throw new ConvertException(Messages.ProjectManager_22);
+    
+    if (ConvertManager.getInstance().getConverter(null,null)==null)
+      throw new InitializeException(Messages.ProjectManager_12);
   }
   
   /**

@@ -18,6 +18,10 @@
             <zipfileset dir="lib/common" includes="*.jar"/>
             <zipfileset dir="lib/windows" includes="*"/>
         </jar>
+		<zip destfile="hifiburn_win.zip">
+			<fileset file="hifiburn_win.jar"/>
+			<fileset dir="3dparty"/>
+		</zip>
     </target>
 	
 	<target name="create_run_jar_linux_x86">

@@ -32,5 +32,7 @@ public interface IBurner
   public boolean canBurn();
   
   public void setMonitor(IProgressMonitor theMonitor);
+
+  public Map<String, String> getWriteSpeed();
   
 }

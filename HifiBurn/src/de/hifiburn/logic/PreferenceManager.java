@@ -32,6 +32,7 @@ public class PreferenceManager extends Object
     DEFAULTS.put(IPreferenceConstants.FFMPEG_PATH, ""); //$NON-NLS-1$
     DEFAULTS.put(IPreferenceConstants.WODIM_PATH, ""); //$NON-NLS-1$
     DEFAULTS.put(IPreferenceConstants.CDRDAO_PATH, ""); //$NON-NLS-1$
+    DEFAULTS.put(IPreferenceConstants.CDRDAO_SIMULATION, Boolean.FALSE);
   }
   
   /**
@@ -88,6 +89,11 @@ public class PreferenceManager extends Object
   public Double getDouble(String theProperty)
   {
     return store.getDouble(theProperty);
+  }
+  
+  public Boolean getBoolean(String theProperty)
+  {
+    return store.getBoolean(theProperty);
   }
   
   /**

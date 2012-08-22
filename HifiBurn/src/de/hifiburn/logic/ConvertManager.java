@@ -71,6 +71,10 @@ public class ConvertManager
         break;
       }
     
+    // special mode for initialization
+    if (theInput==null && theOutputFormat==null)
+      return _conv;
+    
     if (_conv!=null && _conv.supportFormat(theInput,theOutputFormat))
       return _conv;
     

@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -268,6 +269,14 @@ public class WodimBurner implements IBurner
   public void setMonitor(IProgressMonitor theMonitor)
   {
     // TODO
+  }
+
+  @Override
+  public Map<String, String> getWriteSpeed()
+  {
+    Map<String,String> _ret = new HashMap<String,String>();
+    _ret.put("Maximum", "");
+    return _ret;
   }
 
 }

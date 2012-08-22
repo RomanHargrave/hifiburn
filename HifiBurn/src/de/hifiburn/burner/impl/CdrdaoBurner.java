@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,22 +40,48 @@ public class CdrdaoBurner implements IBurner
   private Pattern progressMatcher = Pattern.compile("Wrote\\s([\\d]*)\\sof\\s([\\d]*)[^\\d]*([\\d]*)%[^\\d]*([\\d]*).*"); //$NON-NLS-1$
   private Pattern progressDoneMatcher = Pattern.compile("Wrote\\s([\\d]*)[^\\d]*([\\d]*)%[^\\d]*([\\d]*).*"); //$NON-NLS-1$
   private Pattern trackMatcher = Pattern.compile("Writing[^\\d]*([\\d]*).*"); //$NON-NLS-1$
-  
+  private Pattern versionMathcer = Pattern.compile("Cdrdao\\sversion\\s([^\\.]*)\\.([^\\.])*\\.([^\\s]*).*"); //$NON-NLS-1$
 
   private IProgressMonitor monitor = null;
+  
+  public boolean passVersion = false; 
   
   @Override
   public void initialize() throws BurnerException, InitializeException
   {
     try
     {
-      execCdrdao(Arrays.asList(new String[] { "scanbus" }), null); //$NON-NLS-1$
+      ICommandListener _l = null;
+      
+      execCdrdao(Arrays.asList(new String[] { "scanbus" }),_l = new ICommandListener() //$NON-NLS-1$
+      {
+        
+        @Override
+        public void newLine(String theLine)
+        {
+          Matcher _m = versionMathcer.matcher(theLine);
+          if (_m.matches() && _m.groupCount()==3)
+          {
+            int _v1=Integer.parseInt(_m.group(1));
+            int _v2=Integer.parseInt(_m.group(2));
+            int _v3=Integer.parseInt(_m.group(3));
+            
+            if (_v1<1 || (_v1>0 && _v2<2) || (_v1>0 && _v2>1 && _v3<3))
+              passVersion = false;
+            else
+              passVersion = true;
+          }
+        }
+      }); //$NON-NLS-1$
     }
     catch (IOException _e)
     {
       throw new InitializeException(
           Messages.CdrdaoBurner_0);
     }
+    
+    if (!passVersion)
+      throw new BurnerException(Messages.CdrdaoBurner_11);
     
     if (PreferenceManager.getInstance().getString(IPreferenceConstants.CDRDAO_DEVICE)==null || 
         PreferenceManager.getInstance().getString(IPreferenceConstants.CDRDAO_DEVICE).trim().length()==0)
@@ -76,9 +103,19 @@ public class CdrdaoBurner implements IBurner
     _args.add("--overburn"); //$NON-NLS-1$
     _args.add("--reload"); //$NON-NLS-1$
     _args.add("-n"); //$NON-NLS-1$
-    _args.add("--simulate"); //$NON-NLS-1$
-    _args.add("--speed"); //$NON-NLS-1$
-    _args.add("16"); //$NON-NLS-1$
+    
+    Boolean _simulate = PreferenceManager.getInstance().getBoolean(IPreferenceConstants.CDRDAO_SIMULATION);
+    if (_simulate!=null && _simulate==true)
+    {
+      _args.add("--simulate"); //$NON-NLS-1$
+    }
+    
+    String _speed = PreferenceManager.getInstance().getString(IPreferenceConstants.CDRDAO_SPEED);
+    if (_speed!=null && _speed.trim().length()>0)
+    {
+      _args.add("--speed"); //$NON-NLS-1$
+      _args.add(_speed); //$NON-NLS-1$
+    }
     
     _args.add("--device"); //$NON-NLS-1$
     _args.add(PreferenceManager.getInstance().getString(IPreferenceConstants.CDRDAO_DEVICE));
@@ -293,7 +330,11 @@ public class CdrdaoBurner implements IBurner
             String _name = _m.group(2) + " ("+_dev+")"; //$NON-NLS-1$ //$NON-NLS-2$
             
             if (_dev.trim().length()>0)
+            {
+              // check if its a writer
+              
               _devs.put(_name, _dev);
+            }
           }
         }
       });
@@ -330,6 +371,14 @@ public class CdrdaoBurner implements IBurner
   public void setMonitor(IProgressMonitor theMonitor)
   {
     monitor = theMonitor;
+  }
+  
+  @Override
+  public Map<String, String> getWriteSpeed()
+  {
+    Map<String,String> _ret = new HashMap<String,String>();
+    _ret.put(Messages.CdrdaoBurner_12, ""); //$NON-NLS-2$
+    return _ret;
   }
 
 }

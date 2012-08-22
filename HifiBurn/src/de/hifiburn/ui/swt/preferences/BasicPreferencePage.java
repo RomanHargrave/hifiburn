@@ -95,6 +95,24 @@ public class BasicPreferencePage extends PreferencePage
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isValid()
+  {
+    if (super.isValid()==false)
+      return false;
+    
+    if (comboBurner.getSelectionIndex()<0)
+      return false;
+    
+    if (comboConverter.getSelectionIndex()<0)
+      return false;
+    
+    return true;
+  }
+
+  /**
    * Called when user clicks Restore Defaults
    */
   protected void performDefaults()
@@ -139,12 +157,28 @@ public class BasicPreferencePage extends PreferencePage
 
     // Set the values from the fields
     if (comboConverter != null)
-      preferenceStore.setValue(IPreferenceConstants.BASIC_AUDIOCONVERTER, 
-          (String)comboConverter.getData(comboConverter.getText()));
+    {
+      if (comboConverter.getData(comboConverter.getText())==null)
+      {
+        preferenceStore.setValue(IPreferenceConstants.BASIC_AUDIOCONVERTER, 
+           ConvertManager.getInstance().getConverter().get(0).getId());
+      }
+      else
+        preferenceStore.setValue(IPreferenceConstants.BASIC_AUDIOCONVERTER, 
+            (String)comboConverter.getData(comboConverter.getText()));
+    }
     
     if (comboBurner != null)
-      preferenceStore.setValue(IPreferenceConstants.BASIC_BURNER, 
+    {
+      if (comboBurner.getData(comboBurner.getText())==null)
+      {
+        preferenceStore.setValue(IPreferenceConstants.BASIC_BURNER, 
+            BurnerManager.getInstance().getBurners().get(0).getId());
+      }
+      else
+        preferenceStore.setValue(IPreferenceConstants.BASIC_BURNER, 
           (String)comboBurner.getData(comboBurner.getText()));
+    }
 
     // Return true to allow dialog to close
     return true;
