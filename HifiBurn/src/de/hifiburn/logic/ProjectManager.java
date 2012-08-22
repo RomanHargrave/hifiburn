@@ -362,7 +362,7 @@ public class ProjectManager
             theBurner.getName()));
       
       theBurner.setMonitor(theMonitor);
-
+      
       try
       {
         

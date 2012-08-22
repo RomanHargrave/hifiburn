@@ -1,0 +1,5 @@
+-- Cdrdao --
+Windows Binaries are from http://www.student.tugraz.at/thomas.plank/
+
+-- FFMpeg --
+Windows Binaries are from

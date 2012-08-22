@@ -15,7 +15,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -189,10 +188,11 @@ public class CdrdaoBurner implements IBurner
             int _bfWriter = Integer.parseInt(_m.group(3)); // Buffer % writer
             int _bfRam = Integer.parseInt(_m.group(4)); // Buffer % ram
             
-            int _percent = (int)((_x100/100d)*_x);
+            int _percent = (int)((double)(100d/_x100)*_x);
             int _diff = _percent - lastWorked;
             if (_diff>0)
             {
+              System.out.println(String.format("x=%d x100=%d percent=%d last=%d diff=%d",_x,_x100,_percent,lastWorked,_diff));
               monitor.worked(_diff);
               lastWorked = _percent;
             }
@@ -417,8 +417,16 @@ public class CdrdaoBurner implements IBurner
   @Override
   public Map<String, String> getWriteSpeed()
   {
-    Map<String,String> _ret = new HashMap<String,String>();
+    Map<String,String> _ret = new LinkedHashMap<String,String>();
     _ret.put(Messages.CdrdaoBurner_12, ""); //$NON-NLS-2$
+    _ret.put("48", "48"); //$NON-NLS-2$
+    _ret.put("32", "32"); //$NON-NLS-2$
+    _ret.put("24", "24"); //$NON-NLS-2$
+    _ret.put("16", "16"); //$NON-NLS-2$
+    _ret.put("8", "8"); //$NON-NLS-2$
+    _ret.put("4", "4"); //$NON-NLS-2$
+    _ret.put("2", "2"); //$NON-NLS-2$
+    _ret.put("1", "1"); //$NON-NLS-2$
     return _ret;
   }
   
