@@ -9,6 +9,7 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
+import de.hifiburn.logic.Util;
 import de.hifiburn.model.Track;
 
 public class TrackListLabelProvider extends LabelProvider implements ITableLabelProvider 
@@ -33,10 +34,11 @@ public class TrackListLabelProvider extends LabelProvider implements ITableLabel
         return _track.getTitle();
       case 3:
       {
-        int _hours = _track.getDuration() / 3600;
-        int _minutes = (_track.getDuration() / 60) % 60;
-        int _seconds = _track.getDuration() % 60;
-        return String.format("%02d:%02d:%02d",_hours,_minutes,_seconds); //$NON-NLS-1$
+        Integer _realduration = _track.getDuration();
+        if (_track.getLength()!=null)
+          _realduration -= _track.getLength();
+        
+        return Util.formatTime(_realduration);
       }
       default:
         break;

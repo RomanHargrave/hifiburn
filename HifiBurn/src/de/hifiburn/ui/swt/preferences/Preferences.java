@@ -101,8 +101,6 @@ public class Preferences
       _mgr.addTo(_converterNode.getId(), _ffmpegNode);
     }
     
-    
-    
     PreferenceDialog _dlg = new PreferenceDialog(theShell, _mgr);
     return _dlg;
   }

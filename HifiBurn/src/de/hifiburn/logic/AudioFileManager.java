@@ -19,7 +19,6 @@ import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.KeyNotFoundException;
 import org.jaudiotagger.tag.Tag;
 
-import de.hifiburn.converter.IConverter;
 import de.hifiburn.i18n.Messages;
 import de.hifiburn.model.Track;
 
@@ -46,12 +45,10 @@ public class AudioFileManager
   public List<String> getExtensions()
   {
     Set<String> _ret = new HashSet<String>();
-    for (IConverter _conv : ConvertManager.getInstance().getConverter())
-    {
-      for (String _s : _conv.getExtension())
-        _ret.add(_s);
-    }
     
+    for (String _s : ConvertManager.getInstance().getConverter(null,null).getExtension())
+        _ret.add(_s);
+
     return new ArrayList<String>(_ret);
   }
   
@@ -74,7 +71,7 @@ public class AudioFileManager
     
   }
 
-  public void readMetaData(Track theTrack, File theFile) throws IOException
+  public void fillMetaData(Track theTrack, File theFile) throws IOException
   {
     if (!theFile.exists() || !theFile.canRead())
       throw new IOException(String.format(Messages.AudioFileManager_0,theFile.getAbsoluteFile()));
@@ -104,11 +101,18 @@ public class AudioFileManager
     AudioHeader _ah = _af.getAudioHeader();
     
     theTrack.setDuration(_ah.getTrackLength());
-    theTrack.setInterpret(getKey(_tag,FieldKey.ARTIST));
-    theTrack.setTitle(getKey(_tag,FieldKey.TITLE));
-    theTrack.setAlbumtitle(getKey(_tag,FieldKey.ALBUM));
-    theTrack.setAlbuminterpret(getKey(_tag,FieldKey.ALBUM_ARTIST));
-    theTrack.setSongwriter(getKey(_tag,FieldKey.COMPOSER));
+
+    // maybe some metadata was setup before by cue loading
+    if (theTrack.getInterpret()==null)
+      theTrack.setInterpret(getKey(_tag,FieldKey.ARTIST));
+    if (theTrack.getTitle()==null)
+      theTrack.setTitle(getKey(_tag,FieldKey.TITLE));
+    if (theTrack.getAlbumtitle()==null)
+      theTrack.setAlbumtitle(getKey(_tag,FieldKey.ALBUM));
+    if (theTrack.getAlbuminterpret()==null)
+      theTrack.setAlbuminterpret(getKey(_tag,FieldKey.ALBUM_ARTIST));
+    if (theTrack.getSongwriter()==null)
+      theTrack.setSongwriter(getKey(_tag,FieldKey.COMPOSER));
   }
 
   protected String getKey(Tag theTag, FieldKey theKey)

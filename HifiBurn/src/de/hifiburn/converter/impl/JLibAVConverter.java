@@ -7,7 +7,9 @@ package de.hifiburn.converter.impl;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,6 +33,32 @@ import de.hifiburn.i18n.Messages;
 
 public class JLibAVConverter implements IConverter
 {
+  
+  protected Map<Integer,String> supportedExtension = new HashMap<Integer,String>();
+
+  /**
+   * 
+   */
+  public JLibAVConverter()
+  {
+    super();
+    supportedExtension.put(CodecWrapperFactory.CODEC_ID_AAC, "aac");
+    supportedExtension.put(CodecWrapperFactory.CODEC_ID_APE, "ape");
+    supportedExtension.put(CodecWrapperFactory.CODEC_ID_EAC3, "ac3");
+    supportedExtension.put(CodecWrapperFactory.CODEC_ID_AC3, "ac3");
+    supportedExtension.put(CodecWrapperFactory.CODEC_ID_FLAC, "flac");
+    supportedExtension.put(CodecWrapperFactory.CODEC_ID_MP3, "mp3");
+    supportedExtension.put(CodecWrapperFactory.CODEC_ID_MP2, "mp2");
+    supportedExtension.put(CodecWrapperFactory.CODEC_ID_PCM_S16LE, "wav");
+    supportedExtension.put(CodecWrapperFactory.CODEC_ID_TTA, "tta");
+    supportedExtension.put(CodecWrapperFactory.CODEC_ID_TWINVQ, "tfq");
+    supportedExtension.put(CodecWrapperFactory.CODEC_ID_VORBIS, "ogg");
+    supportedExtension.put(CodecWrapperFactory.CODEC_ID_WAVPACK, "wv");
+    supportedExtension.put(CodecWrapperFactory.CODEC_ID_WMALOSSLESS, "wma");
+    supportedExtension.put(CodecWrapperFactory.CODEC_ID_WMAPRO, "wma");
+    supportedExtension.put(CodecWrapperFactory.CODEC_ID_WMAV1, "wma");
+    supportedExtension.put(CodecWrapperFactory.CODEC_ID_WMAVOICE, "wma");
+  }
 
   @Override
   public void convert(File theInput, File theOutput, de.hifiburn.converter.Format theOutputFormat, int theBitrate, int theSamplerate)
@@ -161,11 +189,19 @@ public class JLibAVConverter implements IConverter
   public List<String> getExtension()
   {
     List<String> _ret = new ArrayList<String>();
-    _ret.add("*.mp3"); //$NON-NLS-1$
-    _ret.add("*.wav"); //$NON-NLS-1$
-    _ret.add("*.flac"); //$NON-NLS-1$
-    _ret.add("*.ape"); //$NON-NLS-1$
-    _ret.add("*.aac"); //$NON-NLS-1$
+    
+    final CodecWrapperFactory _f = CodecWrapperFactory.getInstance();
+    for (Integer _codec : supportedExtension.keySet())
+    {
+      try
+      {
+        if (_f.findDecoder(_codec)!=null)
+          _ret.add("*."+supportedExtension.get(_codec));  //$NON-NLS-1$
+      }
+      catch (LibavException _e)
+      {
+      }
+    }
     
     return _ret;
   }

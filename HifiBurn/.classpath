@@ -18,7 +18,7 @@
 	<classpathentry kind="lib" path="lib/common/platform.jar"/>
 	<classpathentry kind="lib" path="lib/common/swing2swt.jar"/>
 	<classpathentry kind="lib" path="lib/common/swt-grouplayout.jar"/>
-	<classpathentry kind="lib" path="lib/common/jlibav-0.2-20120815.154751-1.jar"/>
 	<classpathentry kind="lib" path="lib/common/bridj-0.6.2-SNAPSHOT-20120722.jar"/>
+	<classpathentry kind="lib" path="lib/common/jlibav-0.2-20120826.185704-6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

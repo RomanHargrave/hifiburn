@@ -15,6 +15,7 @@ import java.nio.charset.Charset;
 import de.hifiburn.filter.FilterException;
 import de.hifiburn.filter.IFilter;
 import de.hifiburn.i18n.Messages;
+import de.hifiburn.logic.Util;
 import de.hifiburn.model.Project;
 import de.hifiburn.model.Track;
 
@@ -61,9 +62,6 @@ public class TocFileFilter implements IFilter
           _w.close();
         }
       }
-      
-      
-      
     }
     catch (IOException _e)
     {
@@ -125,7 +123,19 @@ public class TocFileFilter implements IFilter
         theWriter.write(String.format("  PREGAP 00:%02d:00\n", _track.getPregap())); //$NON-NLS-1$
       
       if (_track.getWavfile()!=null)
-        theWriter.write(String.format("  AUDIOFILE \"%s\" 0\n",_track.getWavfile().getAbsoluteFile())); //$NON-NLS-1$
+      {
+        String _start = "0";
+        String _length = null;
+        if (_track.getStart()!=null)
+          _start = Util.formatTimeMinutes(_track.getStart());
+        if (_track.getLength()!=null)
+        {
+          _length = Util.formatTimeMinutes(_track.getLength());
+          theWriter.write(String.format("  AUDIOFILE \"%s\" %s %s\n",_track.getWavfile().getAbsoluteFile(),_start,_length)); //$NON-NLS-1$
+        }
+        else
+          theWriter.write(String.format("  AUDIOFILE \"%s\" %s\n",_track.getWavfile().getAbsoluteFile(),_start)); //$NON-NLS-1$
+      }
       
       _counter++;
     }

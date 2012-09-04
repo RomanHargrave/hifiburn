@@ -176,6 +176,8 @@ public class Disc extends AbstractModelObject
     
     for (int _i=0; _i<tracks.size(); _i++)
       tracks.get(_i).setNo(_i+1);
+    
+    
   }
   
   public void removeTrack(Track theTrack)

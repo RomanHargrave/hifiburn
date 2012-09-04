@@ -21,6 +21,8 @@ public class Track extends AbstractModelObject
   protected File cdtextfile = null;
   protected String isrc = null;
   protected Integer pregap = 0;
+  protected Integer start = null; // start inside file (used for cue import)
+  protected Integer length = null; // length from start inside file (used for cue import)
   
   /**
    * 
@@ -232,6 +234,38 @@ public class Track extends AbstractModelObject
   public void setPregap(Integer thePregap)
   {
     firePropertyChange("pregap", pregap, pregap = thePregap); //$NON-NLS-1$
+  }
+
+  /**
+   * @return Returns the start.
+   */
+  public Integer getStart()
+  {
+    return start;
+  }
+
+  /**
+   * @param theStart The start to set.
+   */
+  public void setStart(Integer theStart)
+  {
+    firePropertyChange("start", start, start = theStart); //$NON-NLS-1$
+  }
+
+  /**
+   * @return Returns the length.
+   */
+  public Integer getLength()
+  {
+    return length;
+  }
+
+  /**
+   * @param theLength The length to set.
+   */
+  public void setLength(Integer theLength)
+  {
+    firePropertyChange("length", length, length = theLength); //$NON-NLS-1$
   }
   
   

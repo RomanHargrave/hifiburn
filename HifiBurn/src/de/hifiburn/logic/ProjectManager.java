@@ -25,11 +25,13 @@ import de.hifiburn.converter.ConvertException;
 import de.hifiburn.converter.Format;
 import de.hifiburn.converter.IConverter;
 import de.hifiburn.converter.impl.FFMpegConverter;
+import de.hifiburn.converter.impl.JLibAVConverter;
 import de.hifiburn.filter.FilterException;
 import de.hifiburn.filter.IFilter;
 import de.hifiburn.filter.impl.CueFileFilter;
 import de.hifiburn.filter.impl.TocFileFilter;
 import de.hifiburn.i18n.Messages;
+import de.hifiburn.model.Disc;
 import de.hifiburn.model.Project;
 import de.hifiburn.model.Track;
 import de.hifiburn.ui.swt.TextWidgetLogHandler;
@@ -126,7 +128,7 @@ public class ProjectManager
     // register converter
     ConvertManager.getInstance().registerConverter(new FFMpegConverter());
     // seems not to work until now
-    //ConvertManager.getInstance().registerConverter(new JLibAVConverter());
+    ConvertManager.getInstance().registerConverter(new JLibAVConverter());
       
     // register filter
     FilterManager.getInstance().registerFilter(new CueFileFilter());
@@ -166,6 +168,7 @@ public class ProjectManager
 
   public void addTracks(List<File> theFiles) throws IOException
   {
+    File _cue = null;
     StringBuilder _errors = new StringBuilder();
     for (File _file : theFiles)
     {
@@ -175,24 +178,43 @@ public class ProjectManager
         _errors.append("\n"); //$NON-NLS-1$
         continue;
       }
+      
+      if (_file.getAbsoluteFile().toString().endsWith(".cue"))
+        _cue = _file;
     }
     
     if (_errors.length()>0)
       throw new IOException(_errors.toString());
     
-    for (File _file : theFiles)
+    if (_cue!=null)
     {
-      if (AudioFileManager.getInstance().isAudioFile(_file))
+      Disc _disc = Util.createTracksFromCue(_cue);
+      
+      for (Track _t : _disc.getTracks())
       {
-        Track _t = new Track();
-        _t.setFile(_file);
-        AudioFileManager.getInstance().readMetaData(_t, _file);
-        
-        project.getDisc().addTrack(_t);
+        if (AudioFileManager.getInstance().isAudioFile(_t.getFile()))
+        {
+          AudioFileManager.getInstance().fillMetaData(_t, _t.getFile());
+          project.getDisc().addTrack(_t);
+        }
+      }
+      
+      project.getDisc().setAlbum(_disc.getAlbum());
+      project.getDisc().setInterpret(_disc.getInterpret());
+    } 
+    else
+    {
+      for (File _file : theFiles)
+      {
+        if (AudioFileManager.getInstance().isAudioFile(_file))
+        {
+          Track _t = new Track();
+          _t.setFile(_file);
+          AudioFileManager.getInstance().fillMetaData(_t, _file);
+          project.getDisc().addTrack(_t);
+        }
       }
     }
-    
-    
   }
 
   public int convertAudioFiles(IProgressMonitor theMonitor)

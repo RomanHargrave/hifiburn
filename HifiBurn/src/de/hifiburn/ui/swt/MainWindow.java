@@ -542,7 +542,7 @@ public class MainWindow
                       }
                     });
                     tltmAddTracks.setToolTipText(Messages.MainWindow_18);
-                    tltmAddTracks.setImage(SWTResourceManager.getImage(MainWindow.class, "/de/hifiburn/ui/icons/addtrack.png")); //$NON-NLS-1$
+                    tltmAddTracks.setImage(SWTResourceManager.getImage(MainWindow.class, "/de/hifiburn/ui/icons/addtrack.png"));
                     
                     ToolBar toolBar_1 = new ToolBar(composite_2, SWT.FLAT | SWT.RIGHT);
                     toolBar_1.setLayoutData(BorderLayout.EAST);
@@ -687,6 +687,8 @@ public class MainWindow
       _fullexts.add(_ext);
     }
     
+    _fullexts.add("*.cue");
+    
     _fd.setFilterExtensions(_fullexts.toArray(new String[0]));
     
     String _fn = _fd.open();
@@ -759,7 +761,6 @@ public class MainWindow
           }
         }
       }
-
       tableTracks.setSelection(0);
       viewerTracks.refresh();
       

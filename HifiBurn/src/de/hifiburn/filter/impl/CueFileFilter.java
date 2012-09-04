@@ -15,6 +15,7 @@ import java.nio.charset.Charset;
 import de.hifiburn.filter.FilterException;
 import de.hifiburn.filter.IFilter;
 import de.hifiburn.i18n.Messages;
+import de.hifiburn.logic.Util;
 import de.hifiburn.model.Project;
 import de.hifiburn.model.Track;
 
@@ -87,6 +88,7 @@ public class CueFileFilter implements IFilter
       theWriter.write(String.format("TITLE \"%s\"\n",theProject.getDisc().getAlbum()));  //$NON-NLS-1$
     
     int _counter=1;
+    
     for (Track _track : theProject.getDisc().getTracks())
     {
       if (_track.getWavfile()!=null)
@@ -111,7 +113,16 @@ public class CueFileFilter implements IFilter
       if (_counter>1)
         theWriter.write(String.format("    PREGAP 00:%02d:00\n", _track.getPregap())); //$NON-NLS-1$
       
-      theWriter.write(String.format("    INDEX 01 00:00:00\n")); //$NON-NLS-1$
+      String _start = "0";
+      if (_track.getStart()!=null)
+      {
+        _start = Util.formatTimeMinutes(_track.getStart());
+        theWriter.write(String.format("    INDEX 01 %s\n",_start)); //$NON-NLS-1$
+      }
+      else
+        theWriter.write(String.format("    INDEX 01 00:00:00\n")); //$NON-NLS-1$
+      
+      
       
       _counter++;
     }

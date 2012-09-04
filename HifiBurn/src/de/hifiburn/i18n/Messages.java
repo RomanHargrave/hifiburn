@@ -11,6 +11,7 @@ public class Messages extends NLS
 {
   private static final String BUNDLE_NAME = "de.hifiburn.i18n.messages"; //$NON-NLS-1$
 
+  
   public static String AudioFileManager_0;
 
   public static String AudioFileManager_1;
@@ -208,7 +209,7 @@ public class Messages extends NLS
   public static String ProjectManager_22;
 
   public static String ProjectManager_23;
-
+  
   public static String ProjectManager_3;
 
   public static String ProjectManager_4;
@@ -248,6 +249,7 @@ public class Messages extends NLS
   public static String WodimPreferencePage_3;
   public static String MainWindow_mntmRemoveTrack_text;
   public static String MainWindow_tltmAddTracks_text;
+  public static String MainWindow_tltmAddCue_text;
   static
   {
     // initialize resource bundle
